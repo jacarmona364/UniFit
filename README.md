@@ -2,15 +2,13 @@
 Repositorio para la asignatura Infraestructura Virtual de José Antonio Carmona Molina - Curso 25/26
 
 ## Descripción del Problema
-Soy estudiante de Ingeniería y, además, practico deporte con una alta frecuencia durante la semana. Juego al fútbol dos veces por semana y entreno en el gimnasio, y el principal problema que me encuentro es la planificación semanal de entrenamientos y partidos, ya que debo compaginarlo con mis estudios y evitar tanto la sobrecarga como la falta de descanso. 
+Soy estudiante y deportista amateur y debo compaginar un calendario fijo de partidos de fútbol con mis entrenamientos de gimnasio. El calendario de partidos es estable y conocido, pues juego martes y jueves a las 21:00h, pero mi verdadero problema surge con las rutinas de gimnasio:
 
-Dicha planificación requiere tener en cuenta varios factores:
-- Los partidos se disputan dos veces por semana (martes y jueves), por lo que no debo realizar entrenamientos de pierna en las 24 horas anteriores o posteriores.
-- Necesito combinar de forma equilibrada las sesiones de gimnasio (fuerza, cardio y recuperación) con los partidos de fútbol, evitando acumular más de dos entrenamientos de alta intensidad en una misma semana.
-- Los estudios ocupan gran parte del día, por lo que sólo dispongo de determinados huecos horarios para entrenar, principalmente por la tarde.
-- Es necesario respetar al menos un día de descanso completo a la semana para mejorar la recuperación y evitar lesiones.
+- Las [rutinas](/docs/rutinas.md) de fuerza, cardio o recuperación no están en un formato uniforme, sino dispersas en páginas web, aplicaciones y notas personales.
+- No encuentro la forma de organizar las sesiones de entrenamiento para no sobrepasar un cierto nivel de sobrecarga a la semana, ni que no se solapen los días donde trabajo tren inferior con días de partido.
+- Cada entrenamiento trabaja diferentes grupos musculares, los cuales no logro identificar en cada ejercicio. 
 
-Todos estos factores hacen que organizar mi calendario deportivo-académico sea complicado y consuma demasiado tiempo, lo que a menudo provoca entrenamientos desordenados, mala recuperación y bajo rendimiento tanto en los estudios como en la actividad física.
+Esto provoca que no pueda cruzar fácilmente la información del calendario de partidos con la de los entrenamientos para evitar conflictos, lesiones o irregularidades en mi rendimiento.
 
 ---
 
