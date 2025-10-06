@@ -7,7 +7,7 @@
 
 ---
 
-### [M1] Milestone 1: 
+### [M1] Milestone 1: Extracción de la información
 - Módulo de código encargado de recopilar la información en bruto de la página [muscleandstrength.com](https://www.muscleandstrength.com/exercises) sobre el proceso descrito en la [HU1](/docs/HU.md), basándose en el modelo obtenido del milestone 0.
 
 - Se considerará viable cuando el producto entregado resuelva el problema que describe la [HU1](/docs/HU.md).
@@ -20,3 +20,4 @@
 - Se considerará viable cuando el producto entregado resuelva el problema que describe la [HU2](/docs/HU.md).
 
 ---
+
