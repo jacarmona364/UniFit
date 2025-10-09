@@ -7,19 +7,14 @@
 
 ---
 
-### [M1] Milestone 1: Extracción de la información
-- Módulo de código encargado de recopilar la información en bruto de la página [muscleandstrength.com](https://www.muscleandstrength.com/exercises) sobre el proceso descrito en la [HU1](/docs/HU.md), basándose en el modelo obtenido del milestone 0.
+### [M1] Milestone 1: Implementación de la lógica de negocio
+- Módulo de código encargado de implementar la lógica de negocio necesaria para obtener y estructurar la información sobre ejercicios desde la página muscleandstrength.com, conforme al modelo definido en el milestone 0.
 
-- Se considerará viable cuando el producto entregado resuelva el problema que describe la [HU1](/docs/HU.md).
-
----
-
-### [M2] Milestone 2: Implementación de la lógica de negocio
-- Módulo de código encargado de aplicar la lógica de negocio sobre el proceso descrito en la [HU1](/docs/HU.md), basándose en el modelo obtenido del milestone 0 e integrándolo con el código implementado en el milestone 1.
-
-- Se considerará viable cuando el producto entregado resuelva el problema que describe la [HU1](/docs/HU.md).
+- Se considerará viable cuando el producto entregado resuelva el problema que describe la [HU1](/docs/HU.md), siendo verificado mediante el uso de test y habiendo seguido la metodología de desarrollo.
 
 ---
+
+
 
 
 
