@@ -11,7 +11,9 @@ Aunque la información está disponible públicamente, no se encuentra estructur
 Esta falta de estructura impide representar de manera clara una planificación semanal coherente, que tenga en cuenta descansos, zonas musculares implicadas y posibles solapamientos entre sesiones.
 En consecuencia, el proceso de organización es manual, improvisado y propenso a errores, lo que dificulta mantener una distribución equilibrada de esfuerzo y recuperación.
 
----
+## Planificación del Proyecto
+- [User Stories](/docs/HU.md)
+- [Milestones](/docs/Milestones.md)
 
 ## Licencia
 Este proyecto está licenciado bajo la [Apache License 2.0](LICENSE)
