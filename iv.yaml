@@ -1,0 +1,5 @@
+lenguaje: go
+entidad: internal/planificacion/planificacion.go
+automatizar:
+  fichero: justfile.go
+  orden: just
