@@ -15,7 +15,7 @@ En consecuencia, el proceso de organización es manual, improvisado y propenso a
 - [User Stories](/docs/HU.md)
 - [Milestones](/docs/Milestones.md)
 
-## [Gestor de tareas](https://github.com/jacarmona364/UniFit/docs/gestor_tareas.md)
+## [Gestor de tareas](/docs/gestor_tareas.md)
 
 ### Resumen de las tareas:
 - `just build`: Compila el proyecto y genera el binario en la carpeta bin/.
@@ -23,7 +23,7 @@ En consecuencia, el proceso de organización es manual, improvisado y propenso a
 - `just clean`: Elimina el binario y otros archivos generados durante la compilación.
 - `just check`: Verifica que el código fuente esté correctamente formateado y que cumpla con las reglas de sintaxis definidas.
 
-## [Gestor de dependencias](https://github.com/jacarmona364/UniFit/docs/gestor_dependencias.md)
+## [Gestor de dependencias](/docs/gestor_dependencias.md)
 
 ## Licencia
 Este proyecto está licenciado bajo la [Apache License 2.0](LICENSE)
@@ -34,4 +34,5 @@ La documentación relativa al proyecto se encuentra en la carpeta de [Documentos
 ## Configuración
 
 La configuración del proyecto viene recogida en [Configuracion](/docs/config)
+
 
