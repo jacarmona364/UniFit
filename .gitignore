@@ -1,0 +1,35 @@
+# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary (built with `go test -c`)
+*.test
+
+# Code coverage profiles and other test artifacts
+*.out
+coverage.*
+*.coverprofile
+profile.cov
+
+# Build output directory
+bin/
+
+# Dependency directories (uncomment if using `go mod vendor`)
+# vendor/
+
+# Go workspace files
+go.work
+go.work.sum
+
+# Environment variables file
+.env
+
+# IDE / Editor settings (uncomment depending on editor in use)
+# .idea/
+# .vscode/
+# *.swp
