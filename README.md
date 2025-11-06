@@ -19,7 +19,7 @@ En consecuencia, el proceso de organización es manual, improvisado y propenso a
 
 ### Resumen de las tareas:
 - `just build`: Compila el proyecto y genera el binario en la carpeta bin/.
-- `just installDeps`: Instala las dependencias del proyecto utilizando Go Modules.
+- `just install-deps`: Instala las dependencias del proyecto utilizando Go Modules.
 - `just clean`: Elimina el binario y otros archivos generados durante la compilación.
 - `just check`: Verifica que el código fuente esté correctamente formateado y que cumpla con las reglas de sintaxis definidas.
 
@@ -34,5 +34,6 @@ La documentación relativa al proyecto se encuentra en la carpeta de [Documentos
 ## Configuración
 
 La configuración del proyecto viene recogida en [Configuracion](/docs/config)
+
 
 
