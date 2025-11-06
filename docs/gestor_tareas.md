@@ -46,6 +46,6 @@ Aunque herramientas como Mage y Sage permiten programar tareas directamente en G
 
 ## Resumen de las tareas:
 - `just build`: Compila el proyecto y genera el binario en la carpeta bin/.
-- `just installDeps`: Instala las dependencias del proyecto utilizando Go Modules.
+- `just install-deps`: Instala las dependencias del proyecto utilizando Go Modules.
 - `just clean`: Elimina el binario y otros archivos generados durante la compilación.
 - `just check`: Verifica que el código fuente esté correctamente formateado y que cumpla con las reglas de sintaxis definidas.
