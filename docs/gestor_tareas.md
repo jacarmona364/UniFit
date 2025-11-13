@@ -1,10 +1,16 @@
 # Gestor de Tareas
 
+A diferencia de otros lenguajes, como Go no incorpora un gestor de tareas nativo necesitamos recurrir a herramientas externas para automatizar pasos como:
+- Compilación
+- Ejecución de tests
+- Formateo y lint
+- Ejecutar tareas previas a despliegue o CI/CD
+
 ## Criterios para designar el gestor de tareas
 1. La herramienta debe estar actualizada como máximo en los últimos 6 meses, de esta forma reduciremos la deuda técnica.
-2. La sintaxis debe ser lo más clara posible, para facilitar la implementación futura.
-3. Debe permitir la integración con Go, ya sea de manera directa o indirecta.
-4. Que permita el uso de las mejores prácticas para el lenguaje que faciliten su uso y mantenimiento.
+2. Capacidad para automatizar comandos del toolchain (build, test, vet...), independientemente de si la herramienta usa sintaxis propia o genera llamadas externas.
+3. Rendimiento en la ejecución de tareas: velocidad en ejecuciones repetidas, paralelización, capacidad de builds incrementales y tiempo reducido de resolución y ejecución de flujos complejos.
+4. Portabilidad y facilidad de integración en entornos dockerizados y CI/CD.
 
 ## Opciones de gestor de tareas
 
