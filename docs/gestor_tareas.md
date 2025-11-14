@@ -12,46 +12,72 @@ A diferencia de otros lenguajes, como Go no incorpora un gestor de tareas nativo
 3. Rendimiento en la ejecución de tareas: velocidad en ejecuciones repetidas, paralelización, capacidad de builds incrementales y tiempo reducido de resolución y ejecución de flujos complejos.
 4. Portabilidad y facilidad de integración en entornos dockerizados y CI/CD.
 
-## Opciones de gestor de tareas
+# Opciones de gestor de tareas
 
-**Mage**: Al estar completamente escrito en Go, permite definir tareas usando un lenguaje ya conocido, lo que facilita la integración con el proyecto sin aprender nuevas sintaxis ni lidiar con archivos YAML. 
-Además, las tareas son código Go real, lo que permite aprovechar librerías existentes.
-Inconvenientes: Su mantenimiento no es muy activo actualmente, lo que puede generar cierta deuda técnica si surgen errores o se requiere compatibilidad con nuevas versiones de Go. 
-También carece de una comunidad tan amplia como otras herramientas, por lo que la disponibilidad de ejemplos y soporte es limitada.
+## Mage
+
+Mage presenta un **mantenimiento** moderado, con una actividad menor que otras herramientas, lo cual puede generar algo de deuda técnica a largo plazo. Respecto al **toolchain**, ofrece una integración excelente al permitir ejecutar tareas directamente en Go. En cuanto al **rendimiento**, su primera ejecución es más lenta debido a la compilación inicial, aunque las posteriores son rápidas. En **entornos dockerizados y CI/CD**, funciona correctamente siempre que se incluya la instalación del binario en la imagen base. En conjunto, es adecuado si se desea escribir tareas en Go, aunque no es la opción más eficiente ni la más activa en mantenimiento.
+
 [Documentación oficial](https://github.com/magefile/mage)
 
-**Make**: Es una herramienta que permite definir tareas complejas y dependencias entre ellas, lo que la hace muy versátil y compatible con casi cualquier entorno. 
-Inconvenientes: Su sintaxis basada en Makefiles puede ser compleja y difícil de mantener, especialmente para desarrolladores acostumbrados a Go. Requiere conocimientos adicionales de shell scripting, y en sistemas Windows puede ser más difícil de usar sin herramientas adicionales (como WSL). 
-Además, no ofrece integración con el lenguaje Go, lo que puede ralentizar el desarrollo y generar deuda técnica si el equipo tiene que adaptar constantemente la sintaxis a sus necesidades.
+---
+
+## Make
+
+Make destaca por su **mantenimiento** extremadamente estable y una comunidad muy madura. Su flexibilidad para automatizar el **toolchain** es alta, ya que puede ejecutar cualquier comando de Go sin restricciones. En términos de **rendimiento**, resulta eficiente y permite paralelización mediante `make -j`, aunque no alcanza la velocidad de sistemas especializados como Ninja. Su uso en **Docker y CI/CD** es muy favorable, ya que suele venir preinstalado en imágenes base de Linux. Constituye una herramienta potente y versátil, aunque su sintaxis puede dificultar el mantenimiento en equipos poco familiarizados.
+
+**Conclusión:** muy potente y versátil, con mucho recorrido y muy estandarizada pero menos optimizada que otras.
+
 [Documentación no oficial](https://earthly.dev/blog/golang-makefile/)
 
-**Task**: Es un gestor de tareas que usa archivos YAML para definir los objetivos y comandos, lo que facilita la lectura y organización de tareas simples y no tan simples. 
-Es multiplataforma y puede integrarse con pipelines de CI/CD.
-Inconvenientes: El uso de YAML introduce una capa de abstracción que puede limitar la flexibilidad en proyectos grandes o con lógica más compleja. Además, no permite la integración con Go.
+---
+
+## Task
+
+Task ofrece un **mantenimiento** muy activo con actualizaciones frecuentes y una comunidad creciente. Su capacidad para trabajar con el **toolchain** es excelente, al ejecutar comandos de Go de manera declarativa y sin necesidad de scripts adicionales. En cuanto al **rendimiento**, es suficientemente rápido para la mayoría de entornos y pipelines modernos, aunque no está orientado a builds incrementales avanzados. En **Docker y CI/CD**, su integración es especialmente sólida, siendo común en flujos cloud. Por ello, resulta una herramienta equilibrada, clara y fácil de mantener.
+
+**Conclusión:** una de las opciones más equilibradas, clara y fácil de mantener.
+
 [Documentación oficial](https://taskfile.dev/)
 
-**Just**: Es una herramienta de automatización que simplifica la creación de Makefiles. 
-Los justfile son fáciles de leer y escribir, y permiten definir tareas y dependencias de forma clara, lo que reduce la curva de aprendizaje y mejora la mantenibilidad. Cuenta además con la ventaja de estar en constante proceso de actualización y soporte.
-Inconvenientes: Aunque su sintaxis es más sencilla que la de Make, no está integrada directamente con Go, por lo que las tareas siguen ejecutando comandos externos. Esto puede limitar el aprovechamiento del tipado y la reutilización de librerías dentro de las tareas. 
-Además, la comunidad es más pequeña que la de Make o Task, lo que puede afectar la disponibilidad de ejemplos y documentación avanzada.
+---
+
+## Just
+
+Just cuenta con un **mantenimiento** activo y constante. Su manejo del **toolchain** es sencillo, ya que permite ejecutar comandos externos de Go sin complicaciones. En términos de **rendimiento**, es rápido y ligero, aunque sin las optimizaciones avanzadas de herramientas específicas para compilación. Su integración en **Docker y CI/CD** es fluida, sin requerir configuraciones complejas. Es una opción adecuada para quienes buscan una sintaxis simple y directa sin recurrir a YAML.
+
+**Conclusión:** buena opción si se prioriza una sintaxis ligera sin recurrir a YAML. Ofrece una sintaxis similar a Make, pero más simple.
+
 [Documentación oficial](https://github.com/casey/just)
 
-**Sage**: Sage está inspirado en Mage y permite definir tareas directamente en Go, reemplazando archivos tradicionales como Makefile o Justfile. Al igual que Mage, permite aprovechar tipado, autocompletado y librerías Go, lo que hace que las tareas sean sólidas y fáciles de mantener en proyectos grandes.
-Inconvenientes: Es relativamente nuevo y su comunidad es pequeña, lo que puede limitar el soporte y los recursos disponibles. Al ser reciente, puede carecer de algunas funcionalidades avanzadas de otras herramientas más maduras. Su adopción en proyectos existentes puede requerir tiempo de aprendizaje adicional.
+---
+
+## Sage
+
+Sage presenta un **mantenimiento** activo aunque, al ser una herramienta reciente, su comunidad aún es reducida. Ofrece una integración excelente con el **toolchain**, ya que permite implementar tareas en Go de forma tipada y programática. En cuanto al **rendimiento**, se comporta de manera similar a Mage: una primera ejecución más lenta por la compilación y ejecuciones posteriores rápidas. Su uso en **entornos dockerizados y CI/CD** es correcto, aunque requiere instalar su binario. Es una alternativa potente para tareas complejas escritas en Go, aunque menos probada en grandes proyectos.
+
+**Conclusión:** potente para tareas complejas escritas en Go, pero menos probado en proyectos grandes.
+
 [Documentación oficial](https://github.com/einride/sage)
 
 ---
 
-## Justificación de la elección
-Se ha decidido usar Just como gestor de tareas principal del proyecto debido a su simplicidad y facilidad de mantenimiento. 
-Al permitir definir tareas de forma clara y legible, reduce la posibilidad de errores humanos y facilita la automatización de tareas rutinarias como compilación, pruebas y despliegue del servidor. Además, al estar orientado a la ejecución de comandos de manera directa, no requiere dependencias externas ni cambios considerables en la estructura del proyecto.
+## Ninja
 
-Aunque herramientas como Mage y Sage permiten programar tareas directamente en Go, Just se ha elegido por su curva de aprendizaje más rápida y su sintaxis sencilla, especialmente útil para tareas repetitivas que no requieren lógica compleja dentro de la tarea. Esta elección contribuye a reducir la deuda técnica y facilita la escalabilidad y el mantenimiento a largo plazo del proyecto.
+Ninja destaca por su **mantenimiento** altamente activo y su adopción en proyectos de gran escala como Chromium o LLVM. Aunque su orientación principal no es el **toolchain** de Go, permite ejecutar comandos externos sin problemas. Su principal fortaleza es el **rendimiento**, siendo la herramienta más rápida de todas, especialmente en builds incrementales y procesos altamente paralelizables. En cuanto a **Docker y CI/CD**, su integración es excelente, proporcionando tiempos extremadamente bajos en compilaciones complejas. Es ideal cuando la prioridad absoluta es la velocidad, aunque menos apropiado para tareas generales como linting o testing.
+
+**Conclusión:** es la herramienta con el mejor rendimiento de todas, especialmente en compilaciones incrementales y tareas altamente paralelizables. Es ideal para proyectos donde la prioridad absoluta es la velocidad de build, aunque su enfoque especializado lo hace menos adecuado para tareas genéricas del flujo de desarrollo.
+
+[Documentación oficial](https://pkg.go.dev/github.com/Duncaen/go-ninja)
+---
+
+## Justificación de la elección
+La herramienta más adecuada para el proyecto es Task, ya que ofrece el equilibrio óptimo entre mantenimiento activo, facilidad para automatizar el toolchain, rendimiento suficiente para pipelines en Docker y CI/CD, y una sintaxis clara y de bajo coste de mantenimiento. A diferencia de Ninja, que está centrado en el rendimiento puro, o de Make, que puede volverse difícil de mantener, Task proporciona una solución moderna y flexible que permite cubrir todas las necesidades del proyecto sin añadir complejidad innecesaria.
 
 ---
 
 ## Resumen de las tareas:
-- `just build`: Compila el proyecto y genera el binario en la carpeta bin/.
-- `just install-deps`: Instala las dependencias del proyecto utilizando Go Modules.
-- `just clean`: Elimina el binario y otros archivos generados durante la compilación.
-- `just check`: Verifica que el código fuente esté correctamente formateado y que cumpla con las reglas de sintaxis definidas.
+- `task build`: Compila el proyecto y genera el binario en la carpeta bin/.
+- `task install-deps`: Instala las dependencias del proyecto utilizando go mod tidy.
+- `task clean`: Elimina el binario y otros archivos generados durante la compilación.
+- `task check`: Ejecuta comprobaciones de calidad, incluyendo el formateo (go fmt), el análisis estático (go vet) y cualquier otra regla de sintaxis definida.
