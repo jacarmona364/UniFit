@@ -1,0 +1,24 @@
+version: '3'
+
+tasks:
+  build:
+    desc: Compila el proyecto y genera el binario en bin/
+    cmds:
+      - mkdir -p bin
+      - go build -o bin/app .
+
+  install-deps:
+    desc: Instala las dependencias del proyecto utilizando Go Modules
+    cmds:
+      - go mod tidy
+
+  clean:
+    desc: Elimina binarios y archivos generados
+    cmds:
+      - rm -rf bin
+
+  check:
+    desc: Verifica el formato y realiza análisis estático del código
+    cmds:
+      - go fmt ./...
+      - go vet ./...
