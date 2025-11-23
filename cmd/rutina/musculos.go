@@ -1,5 +1,8 @@
 package rutina
 
+// TODO: Definir el límite real. Pongo 100 temporalmente para que compile pero debe ser un valor del cliente
+const LimiteSobrecarga = 100
+
 //Grupos musculares de la web para ejercitar
 type GrupoMuscular struct {
 	Nombre     string     //nombre del grupo muscular de la web 
