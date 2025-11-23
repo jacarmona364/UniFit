@@ -13,7 +13,7 @@ const (
 // Estructura de ejercicio
 type Ejercicio struct {
 	Nombre      string // nombre del ejercicio
-	Nivel  Dificultad  // dificultad que tiene (3 tipos)
+	Nivel  Dificultad  // dificultad que tiene 3 tipos
 	Intensidad int // intensidad calculada del ejercicio
 }
 
