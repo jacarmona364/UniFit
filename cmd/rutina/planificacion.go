@@ -14,6 +14,8 @@ const (
 )
 
 type Planificacion struct {
-	ID       string 
+	ID       string // Identificador único de la planificacion
+	RutinaSemanal map[DiaSemana][]GrupoMuscular // map que asocia a cada día grupos musculares
 }
+
 
