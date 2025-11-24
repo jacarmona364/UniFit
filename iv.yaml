@@ -1,2 +1,2 @@
 lenguaje: go
-entidad: internal/planificacion/planificacion.go
+entidad: cmd/rutina/planificacion.go
