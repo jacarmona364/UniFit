@@ -12,3 +12,8 @@ const (
 	Sabado    DiaSemana = "SABADO"
 	Domingo   DiaSemana = "DOMINGO"
 )
+
+type Planificacion struct {
+	ID       string 
+}
+
