@@ -1,6 +1,6 @@
 package rutina
 
-// Ejercicios que componen un grupo muscular
+// Ejercicios asociados a un grupo muscular
 
 // La dificultad puede ser de tres tipos
 type Dificultad string
