@@ -13,3 +13,8 @@ const (
 	Sabado
 	Domingo
 )
+
+// Rutina asociada a una fecha
+type Rutina struct {
+
+}
