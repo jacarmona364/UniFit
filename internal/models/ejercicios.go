@@ -7,3 +7,9 @@ const (
 	Intermediate Dificultad = "INTERMEDIATE"
 	Advanced     Dificultad = "ADVANCED"
 )
+
+// Ejericicios que pertenecen a un grupo muscular de la web
+type Ejercicio struct {
+
+}
+
