@@ -1,10 +1,9 @@
 package rutina
 
-//Grupos musculares de la web para ejercitar
-type GrupoMuscular struct {
+//Rutina única con grupos musculares y ejercicios
+type Rutina struct {
 
-	Nombre string // Nombre único que posee cada grupo muscular
-	Ejercicios []Ejercicio // lista de ejercicos asociados al grupo muscular
+	identificador string // identificador unico, distingue las entidades
 	
 }
 
