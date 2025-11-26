@@ -17,4 +17,5 @@ const (
 // Rutina asociada a una fecha
 type Rutina struct {
 
+	rutinaSemanal map[DiaSemana]GrupoMuscular //cada dia de la semana tiene un grupo muscular
 }
