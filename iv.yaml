@@ -1,2 +1,2 @@
 lenguaje: go
-entidad: cmd/rutina/rutina.go
+entidad: internal/models/rutina.go
