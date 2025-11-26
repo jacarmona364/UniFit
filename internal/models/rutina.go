@@ -1,5 +1,9 @@
 package models
 
+import (
+	"time"
+)
+
 // Definimos un tipo personalizado para los días (nuestro Enum)
 type DiaSemana int
 
@@ -17,5 +21,6 @@ const (
 // Rutina asociada a una fecha
 type Rutina struct {
 
+	fecha time.Time // Identificador unico de la semana 
 	rutinaSemanal map[DiaSemana]GrupoMuscular //cada dia de la semana tiene un grupo muscular
 }
