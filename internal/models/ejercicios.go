@@ -10,6 +10,8 @@ const (
 
 // Ejericicios que pertenecen a un grupo muscular de la web
 type Ejercicio struct {
-
+	nombre      string  // nombre del ejercicio obtenido de la web
+	dificultad  Dificultad // un nivel de dificultad
 }
+
 
