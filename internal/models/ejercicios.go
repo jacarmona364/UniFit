@@ -1,17 +1,3 @@
-package models
 
-// La dificultad de un ejercicio puede ser de tres tipos 
-type Dificultad string
-const (
-	Beginner     Dificultad = "BEGINNER"
-	Intermediate Dificultad = "INTERMEDIATE"
-	Advanced     Dificultad = "ADVANCED"
-)
-
-// Ejericicios que pertenecen a un grupo muscular de la web
-type Ejercicio struct {
-	nombre      string  // nombre del ejercicio obtenido de la web
-	dificultad  Dificultad // un nivel de dificultad
-}
 
 
