@@ -1,5 +1,5 @@
 lenguaje: go
 entidad: internal/planificacion/planificacion.go
 automatizar:
-  fichero: taskfile.yml
+  fichero: Taskfile.yml
   orden: task
