@@ -9,16 +9,15 @@ A diferencia de otros lenguajes, como Go no incorpora un gestor de tareas nativo
 ## Criterios para designar el gestor de tareas
 1. La herramienta debe estar actualizada como máximo en los últimos 6 meses, de esta forma reduciremos la deuda técnica.
 2. Rendimiento en la ejecución de tareas (Crítico para CI/CD): El rendimiento es un criterio esencial, ya que el gestor se ejecutará con frecuencia en el sistema de Integración Continua (CI). La ganancia de rendimiento, aunque sean milisegundos por tarea, se acumulará significativamente en cada pipeline, reduciendo el coste de hosting y el tiempo de feedback al desarrollador.
-3. Facilidad de uso y mantenimiento: aunque, por lo general y dada la complejidad del proyecto, ninguno de los gestores propuestos va a preseentar dificultades muy superiores al resto, hay algunos más fáciles de usar que otros, lo cuál en términos de tiempo de desarrollo se traduce en una mejora de eficiencia tan notable como para considerarlo un criterio a tener en cuenta.
-4. Cualquier detalle que ayude a reducir la deuda técnica deberá ser tomado en cuenta de cara la elección.
+3. El toolchain permite ejecutar tareas directamente en Go.
 
 # Opciones de gestor de tareas
 
 ## Mage
 
-Mage presenta un **mantenimiento** moderado, con una actividad menor que otras herramientas, lo cual puede generar algo de deuda técnica a largo plazo. En cuanto al **rendimiento**, su primera ejecución es más lenta debido a la compilación inicial, tardando entre 100-500ms, aunque las posteriores son rápidas, en torno a loa 5ms. En **entornos dockerizados y CI/CD**, funciona correctamente siempre que se incluya la instalación del binario en la imagen base. Respecto al **toolchain**, permite ejecutar tareas directamente en Go.
+Mage presenta un **mantenimiento** moderado, con una actividad menor que otras herramientas, lo cual puede generar algo de deuda técnica a largo plazo pues su última actualización es de hace más de 6 meses. En cuanto al **rendimiento**, su primera ejecución es más lenta debido a la compilación inicial, tardando entre 100-500ms, aunque las posteriores son rápidas, en torno a loa 5ms. En **entornos dockerizados y CI/CD**, funciona correctamente siempre que se incluya la instalación del binario en la imagen base. Respecto al **toolchain**, permite ejecutar tareas directamente en Go.
 
-**Conclusión:** En conjunto, es el más adecuado si se desea escribir tareas en Go, aunque dado el poco soporte que recibe, debemos descartarlo para no generar deuda técnica.
+**Conclusión:** En conjunto, es adecuado si se desea escribir tareas en Go, aunque dado el poco soporte que recibe, pierde bastantes puntos en favor de no generar deuda técnica.
 
 [Documentación oficial](https://github.com/magefile/mage)
 
@@ -26,9 +25,9 @@ Mage presenta un **mantenimiento** moderado, con una actividad menor que otras h
 
 ## Make
 
-Make destaca por su **mantenimiento** extremadamente estable y una comunidad muy madura. Su flexibilidad para automatizar el **toolchain** es alta, ya que puede ejecutar cualquier comando de Go sin restricciones. En términos de **rendimiento**, resulta eficiente, aunque no alcanza la velocidad de sistemas especializados como Ninja. Su uso en **Docker y CI/CD** es muy favorable, ya que suele venir preinstalado en imágenes base de Linux. Constituye una herramienta potente y versátil, aunque su sintaxis puede dificultar el mantenimiento en equipos poco familiarizados. Además, Make no es un gestor de tareas específico para Go, lo que puede hacer que la deuda técnica aumente.
+Make destaca por su **mantenimiento** extremadamente estable y una comunidad muy madura. El **toolchain** permite ejecutar cualquier comando de Go sin restricciones. En términos de **rendimiento**, resulta eficiente, aunque no alcanza la velocidad de sistemas especializados como Ninja, ofreciendo tiempos medios de ejecución de entre 50 y 200 ms. Su uso en **Docker y CI/CD** es muy favorable, ya que suele venir preinstalado en imágenes base de Linux. Cabe destacar que Make no es un gestor de tareas específico para Go, lo que puede hacer que la deuda técnica aumente.
 
-**Conclusión:** muy potente y versátil, con mucho recorrido y muy estandarizada pero menos optimizada que otras, el no ser específico de Go sería el único inconveniente.
+**Conclusión:** muy potente y versátil, con mucho recorrido y muy estandarizada pero menos optimizada que otras, el no ser específico de Go sería el único inconveniente junto con sus tiempos medios de ejecución considerablemente peores que los de otras herramientas como ninja, task o just.
 
 [Documentación no oficial](https://earthly.dev/blog/golang-makefile/)
 
@@ -36,19 +35,20 @@ Make destaca por su **mantenimiento** extremadamente estable y una comunidad muy
 
 ## Task
 
-Task ofrece un **mantenimiento** muy activo con actualizaciones frecuentes y una comunidad creciente. Su capacidad para trabajar con el **toolchain** es excelente, al ejecutar comandos de Go de manera declarativa y sin necesidad de scripts adicionales. En cuanto al **rendimiento**, es suficientemente rápido para la mayoría de entornos y pipelines modernos, aunque no está orientado a builds incrementales avanzados. En **Docker y CI/CD**, es especialmente sólido, siendo común en flujos cloud. Por ello, resulta una herramienta equilibrada, clara y fácil de mantener. No es un gestor específico de Go.
+Task ofrece un **mantenimiento** muy activo con actualizaciones frecuentes (a día de hoy se agregan mejoras de manera diaria-semanal) y una comunidad creciente. Su **toolchain** permite ejecutar comandos de Go de manera declarativa y sin necesidad de scripts adicionales. En cuanto al **rendimiento**, es suficientemente rápido para la mayoría de entornos y pipelines modernos, el overhead es prácticamente nulo y el tiempo medio de ejecución por tarea de menos de 8 ms. En **Docker y CI/CD**, es especialmente sólido, siendo común en flujos cloud. Por ello, resulta una herramienta equilibrada, rápida y fácil de mantener. El único inconveniente es que no se trata de un gestor específico de Go.
 
 **Conclusión:** una de las opciones más equilibradas, cumple con los objetivos de rendimiento, reducción de deuda técnica y soporte muy activo de la comunidad.
 
 [Documentación oficial](https://taskfile.dev/)
+[Documentación GitHub](https://github.com/go-task/task)
 
 ---
 
 ## Just
 
-Just cuenta con un **mantenimiento** activo y constante. Su manejo del **toolchain** es sencillo, ya que permite ejecutar comandos externos de Go sin complicaciones. En términos de **rendimiento**, es rápido y ligero, presentando un tiempo medio de ejecución por tarea inferior a los 10 ms, aunque sin las optimizaciones avanzadas de herramientas específicas para compilación. Es apta en **Docker y CI/CD**, sin requerir configuraciones complejas. Es una opción adecuada para quienes buscan una sintaxis simple y directa sin recurrir a YAML.
+Just cuenta con un **mantenimiento** activo y constante, la última actualización es de hace dos días pero suele tener mejoras con una frecuencia mensual. El **toolchain** permite ejecutar comandos de Go. En términos de **rendimiento**, es rápido y ligero, presentando un tiempo medio de ejecución por tarea inferior a los 10 ms. Es apta en **Docker y CI/CD**, sin requerir configuraciones complejas.
 
-**Conclusión:** buena opción si se prioriza una sintaxis ligera sin recurrir a YAML. Ofrece una sintaxis similar a Make, pero más simple, aunque tampoco es específico para Go. Su comunidad es muy activa.
+**Conclusión:** Ofrece un rendimiento y un soporte similares a task, aunque tampoco es específico para Go. Su comunidad es muy activa.
 
 [Documentación oficial](https://github.com/casey/just)
 
@@ -56,9 +56,9 @@ Just cuenta con un **mantenimiento** activo y constante. Su manejo del **toolcha
 
 ## Sage
 
-Sage presenta un **mantenimiento** activo aunque, al ser una herramienta reciente, su comunidad aún es reducida. Ofrece un **toolchain** que permite implementar tareas en Go de forma tipada y programática. En cuanto al **rendimiento**, se comporta de manera similar a Mage: una primera ejecución más lenta por la compilación y ejecuciones posteriores rápidas. Su uso en **entornos dockerizados y CI/CD** es correcto, aunque requiere instalar su binario. Es una alternativa potente para tareas complejas escritas en Go, aunque menos probada en grandes proyectos.
+Sage presenta un **mantenimiento** activo aunque, al ser una herramienta reciente, su comunidad aún es reducida. Ofrece un **toolchain** que permite ejecutar tareas en Go. En cuanto al **rendimiento**, se comporta de manera similar a Mage: una primera ejecución más lenta por la compilación (100-500ms) y ejecuciones posteriores rápidas (5ms). Permite su uso en **entornos dockerizados y CI/CD**.
 
-**Conclusión:** potente para tareas complejas escritas en Go, pero menos probado en proyectos grandes. Lo poco madurado que aún está este gestor no obliga a descartarlo para no generar deuda técnica innecesaria.
+**Conclusión:** similar a Mage, pero menos probado. Lo poco madurado que aún está este gestor le quita puntos en nuestra lista, de cara a no generar deuda técnica innecesaria.
 
 [Documentación oficial](https://github.com/einride/sage)
 
@@ -66,17 +66,17 @@ Sage presenta un **mantenimiento** activo aunque, al ser una herramienta recient
 
 ## Ninja
 
-Ninja destaca por su **mantenimiento** altamente activo y su adopción en proyectos de gran escala como Chromium o LLVM. Aunque su orientación principal no es el **toolchain** de Go, permite ejecutar comandos externos sin problemas. Su principal fortaleza es el **rendimiento**, siendo la herramienta más rápida de todas, con un tiempo medio de ejecución por tarea de 8 ms, especialmente en builds incrementales, esto se debe a dos razones: que minimiza la sobrecarga (diseñado desde cero con el único objetivo de analizar las dependencias y ejecutar comandos lo más rápido posible), y que no hace detección de cambios compleja. En cuanto a **Docker y CI/CD**, permite su uso de manera sólida, proporcionando tiempos extremadamente bajos en compilaciones complejas. Es ideal cuando la prioridad absoluta es la velocidad, aunque menos apropiado para tareas generales como linting o testing.
+Ninja destaca por su **mantenimiento** altamente activo. Aunque su orientación principal no es el **toolchain** de Go, permite ejecutar tareas sin problemas. Su principal fortaleza es el **rendimiento**, siendo la herramienta más rápida de todas, con un tiempo medio de ejecución por tarea de 8 ms, esto se debe a dos razones: que minimiza la sobrecarga y que no hace detección de cambios compleja. En cuanto a **Docker y CI/CD**, permite su uso de manera sólida, proporcionando tiempos extremadamente bajos de compilación. Es ideal cuando la prioridad absoluta es la velocidad, aunque menos apropiado para tareas generales como linting o testing.
 
-**Conclusión:** es la herramienta con el mejor rendimiento de todas, especialmente en compilaciones incrementales. Es ideal para proyectos donde la prioridad absoluta es la velocidad de build, aunque su enfoque especializado lo hace menos adecuado para tareas genéricas del flujo de desarrollo. Difiere con otras herramientas como Task, Just o Sage, que son más prácticos y rápidos para el 90% del workflow de Go debido a su startup time mínimo, lo cual también los hace ideales para la mayoría de las tareas en proyectos Go, que son lint, test, vet, format.
+**Conclusión:** es la herramienta con el mejor rendimiento de todas. Es ideal para proyectos donde la prioridad absoluta es la velocidad de build, aunque su enfoque especializado lo hace menos adecuado para tareas genéricas del flujo de desarrollo. Difiere con otras herramientas como Task, Just o Sage, que son más prácticos y rápidos para el 90% del workflow de Go debido a su startup time mínimo, lo cual también los hace ideales para la mayoría de las tareas en proyectos Go, que son lint, test, vet, format.
 
 [Documentación oficial](https://pkg.go.dev/github.com/Duncaen/go-ninja)
 ---
 
 ## Justificación de la elección
-Aunque inicialmente la herramienta que puede parecer más interesante es Mage, el hecho de que el proyecto lleve sin actualizarse más de un año puede indicar que ha sido abandonado, incurriendo así en deuda técnica.
+Aunque inicialmente la herramienta que puede parecer más interesante es Mage, el hecho de que el proyecto lleve sin actualizarse más de 6 meses puede indicar que ha sido abandonado, incurriendo así en deuda técnica.
 
-Por lo tanto, debido a los criterios establecidos, la herramienta que consideramos más adecuada para el proyecto es **Task**, ya que ofrece el equilibrio óptimo entre mantenimiento activo, facilidad de uso del toolchain, rendimiento suficiente para pipelines en Docker y CI/CD, y un bajo coste de mantenimiento. A diferencia de Ninja, que está centrado en el rendimiento puro, o de Make, que puede volverse difícil de mantener, Task proporciona una solución moderna y flexible que permite cubrir todas las necesidades del proyecto sin añadir complejidad innecesaria.
+Por lo tanto, debido a los criterios establecidos, la herramienta que consideramos más adecuada para el proyecto es **Task**, ya que ofrece el equilibrio óptimo entre mantenimiento activo, **toolchain** que permite ejecutar tareas en Go, **rendimiento** suficiente para ejecutar las tareas pertinentes, y un bajo coste de mantenimiento. A diferencia de Ninja, que está centrado en el rendimiento puro, o de Make, que puede volverse difícil de mantener, Task proporciona una solución moderna y flexible que permite cubrir todas las necesidades del proyecto sin añadir complejidad innecesaria.
 
 ---
 
