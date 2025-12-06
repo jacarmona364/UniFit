@@ -23,7 +23,7 @@ Mage presenta un **mantenimiento** moderado, con una actividad menor que otras h
 
 ## Make
 
-Make destaca por su **mantenimiento** extremadamente estable y una comunidad muy madura. El **toolchain** permite ejecutar cualquier comando de Go sin restricciones. En términos de **rendimiento**, resulta eficiente, aunque no alcanza la velocidad de sistemas especializados como Ninja, ofreciendo tiempos medios de ejecución de entre 50 y 200 ms. Su uso en **Docker y CI/CD** es muy favorable, ya que suele venir preinstalado en imágenes base de Linux. Cabe destacar que Make no es un gestor de tareas específico para Go, lo que puede hacer que la deuda técnica aumente.
+Make destaca por su **mantenimiento** extremadamente estable y una comunidad muy madura. El **toolchain** permite ejecutar cualquier comando de Go sin restricciones. En términos de **rendimiento**, resulta eficiente, aunque no alcanza la velocidad de sistemas especializados como Ninja, ofreciendo tiempos medios de ejecución de entre 50 y 200 ms. Su uso en **Docker y CI/CD** es muy favorable, ya que suele venir preinstalado en imágenes base de Linux.
 
 [Documentación no oficial](https://earthly.dev/blog/golang-makefile/)
 
@@ -31,7 +31,7 @@ Make destaca por su **mantenimiento** extremadamente estable y una comunidad muy
 
 ## Task
 
-Task ofrece un **mantenimiento** muy activo con actualizaciones frecuentes (a día de hoy se agregan mejoras de manera diaria-semanal) y una comunidad creciente. Su **toolchain** permite ejecutar comandos de Go de manera declarativa y sin necesidad de scripts adicionales. En cuanto al **rendimiento**, es suficientemente rápido para la mayoría de entornos y pipelines modernos, el overhead es prácticamente nulo y el tiempo medio de ejecución por tarea de menos de 8 ms. En **Docker y CI/CD**, es especialmente sólido, siendo común en flujos cloud. Por ello, resulta una herramienta equilibrada, rápida y fácil de mantener. El único inconveniente es que no se trata de un gestor específico de Go.
+Task ofrece un **mantenimiento** muy activo con actualizaciones frecuentes (a día de hoy se agregan mejoras de manera diaria-semanal) y una comunidad creciente. Su **toolchain** permite ejecutar comandos de Go de manera declarativa y sin necesidad de scripts adicionales. En cuanto al **rendimiento**, es suficientemente rápido para la mayoría de entornos y pipelines modernos, el overhead es prácticamente nulo y el tiempo medio de ejecución por tarea de menos de 8 ms. En **Docker y CI/CD**, es especialmente sólido, siendo común en flujos cloud. Por ello, resulta una herramienta equilibrada, rápida y fácil de mantener.
 
 [Documentación oficial](https://taskfile.dev/)
 [Documentación GitHub](https://github.com/go-task/task)
@@ -64,7 +64,7 @@ Ninja destaca por su **mantenimiento** altamente activo. Aunque su orientación 
 ## Justificación de la elección
 Aunque inicialmente la herramienta que puede parecer más interesante es Mage, el hecho de que el proyecto lleve sin actualizarse más de 6 meses puede indicar que ha sido abandonado, incurriendo así en deuda técnica.
 
-Por lo tanto, debido a los criterios establecidos, la herramienta que consideramos más adecuada para el proyecto es **Task**, ya que ofrece el equilibrio óptimo entre mantenimiento activo, **toolchain** que permite ejecutar tareas en Go, **rendimiento** suficiente para ejecutar las tareas pertinentes, y un bajo coste de mantenimiento. A diferencia de Ninja, que está centrado en el rendimiento puro, o de Make, que puede volverse difícil de mantener, Task proporciona una solución moderna y flexible que permite cubrir todas las necesidades del proyecto sin añadir complejidad innecesaria.
+Por lo tanto, debido a los criterios establecidos, la herramienta que consideramos más adecuada para el proyecto es **Task**, ya que ofrece el equilibrio óptimo entre mantenimiento activo, **toolchain** que permite ejecutar tareas en Go y **rendimiento** suficiente para ejecutar las tareas pertinentes. A diferencia de Ninja, que está centrado en el rendimiento puro, o de Make, que puede volverse difícil de mantener, Task proporciona una solución moderna y flexible que permite cubrir todas las necesidades del proyecto sin añadir complejidad innecesaria.
 
 ---
 
