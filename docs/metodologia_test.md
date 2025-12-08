@@ -15,20 +15,3 @@ código funcional. De este modo, se garantiza que cada línea de código escrita
 
 La aplicación de este flujo asegura que el producto final cumple con las especificaciones de diseño desde su origen. Además, 
 fomenta una arquitectura de software más limpia (Clean Code) y disminuye drásticamente la introducción de errores durante la etapa de desarrollo.
-
-# Principios de Diseño de Test (F.I.R.S.T.)
-
-Para garantizar que la batería de pruebas aporte valor real y no se convierta en un obstáculo para el desarrollo, este proyecto se adhiere estrictamente a los principios F.I.R.S.T. Este acrónimo define las cinco características esenciales que debe poseer un test unitario de calidad:
-
-1. Fast (Velocidad): La ejecución de los tests debe ser inmediata. La rapidez es crucial para no romper el flujo de trabajo del desarrollador, 
-permitiendo que se lancen constantemente tras cada pequeña modificación sin tiempos de espera.
-2. Independent (Independencia): Cada prueba debe ser una unidad aislada. No debe existir acoplamiento entre tests; el resultado de uno no puede depender 
-de la ejecución previa de otro, permitiendo que se ejecuten en cualquier orden o de forma individual.
-3. Repeatable (Repetibilidad): Los resultados deben ser deterministas. Un test debe arrojar siempre el mismo resultado (éxito o fallo) independientemente 
-del entorno, el sistema operativo o el momento en que se ejecute, eliminando la incertidumbre o "flakiness".
-4. Self-validating (Autovalidación): El test debe emitir un veredicto binario y automático (Pasa/Falla). No debe ser necesaria la intervención humana 
-para interpretar logs o comparar salidas visualmente para saber si la prueba ha sido exitosa.
-5. Timely (Oportunidad): Las pruebas deben escribirse en el momento adecuado, que según la metodología TDD es antes de escribir el código de producción. 
-Esto asegura que el diseño del software sea testeable desde su concepción.
-
-La aplicación de estos principios nos permite mantener una suite de pruebas fiable y escalable, asegurando la integridad funcional del código a medida que el proyecto crece.
