@@ -3,5 +3,4 @@ entidad: internal/models/rutina.go
 automatizar:
   fichero: taskfile.yml
   orden: task
-test:
-  fichero: internal/models/rutina_test.go
+test: internal/models/rutina_test.go
