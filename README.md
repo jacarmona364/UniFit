@@ -15,6 +15,16 @@ En consecuencia, el proceso de organización es manual, improvisado y propenso a
 - [User Stories](/docs/HU.md)
 - [Milestones](/docs/Milestones.md)
 
+## [Gestor de tareas](/docs/gestor_tareas.md)
+
+### Resumen de las tareas:
+- `task build`: Compila el proyecto y genera el binario en la carpeta bin/.
+- `task install-deps`: Instala las dependencias del proyecto utilizando Go Modules.
+- `task clean`: Elimina el binario y otros archivos generados durante la compilación.
+- `task check`: Verifica que el código fuente esté correctamente formateado y que cumpla con las reglas de sintaxis definidas.
+
+## [Gestor de dependencias](/docs/gestor_dependencias.md)
+
 ## Licencia
 Este proyecto está licenciado bajo la [Apache License 2.0](LICENSE)
 
@@ -24,3 +34,7 @@ La documentación relativa al proyecto se encuentra en la carpeta de [Documentos
 ## Configuración
 
 La configuración del proyecto viene recogida en [Configuracion](/docs/config)
+
+
+
+
