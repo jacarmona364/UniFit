@@ -1,63 +1,80 @@
 # Análisis y Elección de Herramientas de Testing
 
-Para garantizar la calidad del código en UniFit, se ha realizado un análisis de las herramientas disponibles en el ecosistema de Go, evaluando criterios 
-como el mantenimiento, la deuda técnica generada y la adopción por la comunidad.
+## Biblioteca de Aserciones
+
+#### Criterio: Elimina la necesidad de herramientas externas
 
 ### El Estándar: Paquete testing
 
 Go incluye una potente librería estándar llamada testing.
 
-Ventajas: Es la herramienta oficial, no requiere instalación, es extremadamente rápida y garantiza compatibilidad futura. Al no añadir dependencias 
-externas, mantiene el proyecto ligero. Es muy utilizada por la comunidad y tiene actualizaciones muy frecuentes (en torno a unas 2 al mes).
-
-Limitaciones: Como biblioteca de aserciones es muy primitiva. Obliga a escribir mucha lógica condicional repetitiva (if got != expected { t.Error(...) }), 
-lo que puede hacer que los tests sean difíciles de mantener si crecen mucho.
+Es la herramienta oficial, no requiere instalación, es extremadamente rápida y garantiza compatibilidad futura. No añade dependencias 
+externas, mantiene el proyecto ligero.
 
 [Documentación oficial](https://pkg.go.dev/testing)
 
 ---
 
-### Análisis de Alternativas
-
-1. Testify
+### Testify
 
 Testify es el conjunto de utilidades de testing más adoptado por la comunidad en Go fuera del estándar, complementa el runner de Go añadiendo
-una capa de aserciones (assert.Equal, assert.NotNil). Permite escribir tests mucho más declarativos y legibles sin introducir un framework pesado, lo que lo hace
-más rápido. Tiene actualizaciones más o menos cada trimestre.
+una capa de aserciones (assert.Equal, assert.NotNil). Requiere de una instalación extra, pues no viene integrada con Go.
 
 [Documentación oficial](https://github.com/stretchr/testify)
 
 ---
 
-2. Ginkgo
+## Biblioteca de aserciones seleccionada:
+Nos quedamos con el estándar de Go, *testing*, ya que simplifica muy considerablemente su uso e integración con el lenguaje al venir por defecto con Go.
 
-Ginkgo es un framework BDD (Behavior-Driven Development) completo, utiliza su propio Lenguaje Específico de Dominio (DSL) con bloques Describe e It. Aunque 
-es muy potente, introduce una capa de complejidad y abstracción muy alta, lo que lo hace más difícil de mantener. Para un proyecto como UniFit, aprender su 
-DSL y depender de su estructura añade una carga cognitiva y técnica innecesaria que pueden derivar en deuda técnica futura. Tiene actualizaciones irregulares pero 
-de una media mensual y la comunidad lo tiene considerablemente adoptado, aunque no es el favorito.
+---
+
+## Test runner
+
+#### Criterios: Elimina la necesidad de herramientas externas y No requiere código de inicialización (Zero Boilerplate)
+
+### El Estándar: go test
+Viene instalado por defecto de manera nativa con Go. No requiere código de setup.
+
+[Documentación oficial](https://pkg.go.dev/testing)
+
+### Ginkgo
+
+Ginkgo es un framework BDD (Behavior-Driven Development) completo. Requiere instalar y versionar un binario CLI externo. Para funcionar, requiere escribir explícitamente un Hook de conexión (RegisterFailHandler) y una función TestMain en cada paquete, añadiendo código que no aporta valor de negocio.
 
 [Documentación oficial](https://github.com/onsi/ginkgo)
 
 ---
 
-3. Goconvey
+### Goconvey
 
-Goconvey destaca por ofrecer una interfaz web en tiempo real para visualizar los tests. Aunque visualmente es atractiva, su repositorio muestra una 
-actividad reducida recientemente (pocas actualizaciones en los últimos meses), lo que plantea dudas sobre su mantenimiento a largo plazo y la posible deuda técnica.
+Goconvey destaca por ofrecer una interfaz web en tiempo real para visualizar los tests. Requiere la instalación de binarios adicionales para levantar el servidor web de reportes. Introduce un DSL (Convey(...)) que actúa como una capa de abstracción sobre el test. 
 
 [Documentación oficial](https://github.com/smartystreets/goconvey)
 
 ---
 
-# Elección Final: Estrategia Híbrida
+## Test runner seleccionado:
+Nos quedamos con el estándar *go test*. Es la única opción que garantiza "Zero Config": el desarrollador solo escribe el test y funciona. Evitamos la deuda técnica de mantener archivos de configuración (boilerplate) y la gestión de binarios externos en el entorno de desarrollo. Desechamos también la necesidad de llevar a cabo instalaciones de herramientas externas
+
+---
+
+## Herramienta CLI de ejecución de tests
+
+Nos quedamos con el estándar *go test*.
+
+Esta decisión se fundamenta en la eficiencia operativa y la limpieza del código, cumpliendo estrictamente con los dos criterios de selección del test runner:
+
+Independencia Total: Al estar integrado en el SDK, garantiza la máxima portabilidad. Cualquier entorno (local o CI/CD) capaz de compilar el proyecto es capaz de testearlo inmediatamente, sin gestionar binarios externos ni versiones incompatibles.
+
+Mantenibilidad (Zero Boilerplate): Es la única herramienta que permite una arquitectura "Zero Config". Eliminamos la deuda técnica de mantener archivos de configuración, hooks de inicialización o estructuras de frameworks complejos, manteniendo el código fuente puro y centrado exclusivamente en la lógica de negocio.
+
+# Elección Final:
 
 Tras el análisis, se ha decidido desacoplar el concepto de Test Runner del de Biblioteca de Aserciones para obtener lo mejor de ambos.
 
-1. Test Runner: go test (Librería estándar) Se utilizará el comando nativo de Go como ejecutor de pruebas.
-Justificación: Es el estándar de la industria, garantiza ejecución paralela eficiente y evita depender de binarios externos para compilar y lanzar los tests.
+1. Test Runner: go test (Librería estándar)
 
-2. Biblioteca de Aserciones: testify Se importará el paquete github.com/stretchr/testify/assert.
-Justificación: Se elige para cumplir con los principios de Código Limpio. Mientras que go test gestiona la ejecución, testify nos permite validar la lógica de negocio
-con un lenguaje natural y claro, facilitando la lectura de los tests y la identificación rápida de errores.
+2. Biblioteca de Aserciones: testing
 
-Conclusión: Esta combinación (go test + testify) maximiza la mantenibilidad y rapidez sin introducir la complejidad de frameworks pesados como Ginkgo, eliminando así deuda técnica futura.
+3. Herramienta CLI: Go
