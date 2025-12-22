@@ -25,6 +25,22 @@ una capa de aserciones (assert.Equal, assert.NotNil). Requiere de una instalaci�
 
 ---
 
+### Gomega
+
+Gomega es una biblioteca de aserciones que funciona mediante matchers con una sintaxis tal que (Expect(x).To(Equal(y))). Requiere la instalación de dependencias externas, no viene integrada en Go.
+
+[Documentación oficial](https://github.com/onsi/gomega)
+
+---
+
+### QuickTest
+
+Biblioteca de aserciones enfocada en proporcionar comparaciones rápidas y mensajes de error muy detallados (qt.Assert). Requiere la instalación de una dependencia externa.
+
+[Documentación oficial](https://github.com/frankban/quicktest)
+
+---
+
 ## Biblioteca de aserciones seleccionada:
 Nos quedamos con el estándar de Go, *testing*, ya que simplifica muy considerablemente su uso e integración con el lenguaje al venir por defecto con Go.
 
