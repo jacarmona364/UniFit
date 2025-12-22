@@ -57,7 +57,8 @@ Viene instalado por defecto de manera nativa con Go. No requiere código de setu
 
 ### Ginkgo
 
-Ginkgo es un framework BDD (Behavior-Driven Development) completo. Requiere instalar y versionar un binario CLI externo. Para funcionar, requiere escribir explícitamente un Hook de conexión (RegisterFailHandler) y una función TestMain en cada paquete, añadiendo código que no aporta valor de negocio.
+Ginkgo es un framework BDD completo. Requiere instalar y un binario CLI externo además de escribir explícitamente un Hook de conexión y una función TestMain en cada paquete, añadiendo código de
+inicialización que no aporta valor de negocio.
 
 [Documentación oficial](https://github.com/onsi/ginkgo)
 
