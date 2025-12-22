@@ -6,9 +6,10 @@
 
 ### El Estándar: Paquete testing
 
-Go incluye una potente librería estándar llamada testing.
+Go incluye una potente librería estándar llamada testing, que aunque no es una biblioteca de aserciones como tal, permite el uso de test y errores integrados mediante el propio lenguaje Go, con elementos
+de su propia sintaxis como *if* o *switch*.
 
-Es la herramienta oficial, no requiere instalación, es extremadamente rápida y garantiza compatibilidad futura. No añade dependencias 
+Es la herramienta oficial, no requiere instalación y garantiza compatibilidad futura. No añade dependencias 
 externas, mantiene el proyecto ligero.
 
 [Documentación oficial](https://pkg.go.dev/testing)
