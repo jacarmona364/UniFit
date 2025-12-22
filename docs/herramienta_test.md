@@ -41,6 +41,14 @@ Biblioteca de aserciones enfocada en proporcionar comparaciones rápidas y mensa
 
 ---
 
+### Goconvey (Biblioteca de aserciones)
+
+Goconvey dispone de una biblioteca de aserciones y una herramienta CLI, en este caso solo necesitaríamos la primera parte. Requiere la instalación de una dependencia externa.
+
+[Documentación oficial](https://github.com/smartystreets/goconvey)
+
+---
+
 ## Biblioteca de aserciones seleccionada:
 Nos quedamos con el estándar de Go, *testing*, ya que simplifica muy considerablemente su uso e integración con el lenguaje al venir por defecto con Go.
 
@@ -64,9 +72,9 @@ inicialización que no aporta valor de negocio.
 
 ---
 
-### Goconvey
+### Goconvey (Solo CLI/UI)
 
-Goconvey destaca por ofrecer una interfaz web en tiempo real para visualizar los tests. Requiere la instalación de binarios adicionales para levantar el servidor web de reportes. Introduce un DSL (Convey(...)) que actúa como una capa de abstracción sobre el test. 
+Goconvey destaca por ofrecer una interfaz web en tiempo real para visualizar los tests. Requiere la instalación de binarios adicionales para levantar el servidor web de reportes. Introduce un DSL (Convey(...)) que actúa como una capa de abstracción sobre el test. Aunque también posee una biblioteca de aserciones, para el test runner solo utilizaríamos el CLI de manera independiente.
 
 [Documentación oficial](https://github.com/smartystreets/goconvey)
 
