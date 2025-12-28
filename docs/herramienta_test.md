@@ -47,7 +47,7 @@ Goconvey dispone de una biblioteca de aserciones y una herramienta CLI, en este 
 
 [Documentación oficial](https://github.com/smartystreets/goconvey)
 
----
+----
 
 ## Biblioteca de aserciones seleccionada:
 Nos quedamos con el estándar de Go, *testing*, ya que simplifica muy considerablemente su uso e integración con el lenguaje al venir por defecto con Go.
