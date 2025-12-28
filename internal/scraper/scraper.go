@@ -21,48 +21,60 @@ var reTags = regexp.MustCompile(`<[^>]*>`)
 // 1. EXTRAER RUTINAS (Index)
 
 func ExtraerRutinas(r io.Reader) (map[models.GrupoMuscular]string, error) {
+	// 1. Cargamos el HTML en memoria
 	htmlContent, err := leerHTML(r)
 	if err != nil {
 		return nil, err
 	}
 
-	// 1. Validación Estructural Global (Fail Fast)
-	// Comprobamos que existan los contenedores principales antes de procesar
-	idxLista := strings.Index(htmlContent, `class="mainpage-category-list"`)
-	if idxLista == -1 {
-		return nil, errors.ErrNoListaCategorias
+	// 2. Acotamos la zona de trabajo (fail fast si no está el contenedor)
+	bloqueTrabajo, err := obtenerBloquePrincipal(htmlContent)
+	if err != nil {
+		return nil, err
 	}
 
-	// Acotamos el HTML para trabajar solo dentro de la lista de rutinas
-	bloqueTrabajo := htmlContent[idxLista:]
+	// 3. Procesamos las celdas encontradas dentro del bloque
+	return procesarListaRutinas(bloqueTrabajo)
+}
 
-	// 2. Procesamiento por Celdas
+func obtenerBloquePrincipal(html string) (string, error) {
+	// Buscamos el div principal. Si no está, la estructura web ha cambiado.
+	const marcador = `class="mainpage-category-list"`
+	idx := strings.Index(html, marcador)
+	if idx == -1 {
+		return "", errors.ErrNoListaCategorias
+	}
+
+	return html[idx:], nil
+}
+
+func procesarListaRutinas(bloque string) (map[models.GrupoMuscular]string, error) {
 	rutinasMap := make(map[models.GrupoMuscular]string)
 	
-	// Dividimos el bloque en celdas individuales
-	celdas := strings.Split(bloqueTrabajo, `class="cell"`)
-
-	// Flag para saber si encontramos al menos una válida (para evitar falsos positivos de errores)
+	// Separamos por celda individual
+	celdas := strings.Split(bloque, `class="cell"`)
 	encontrado := false
 
+	// Empezamos en 1 porque el split 0 es basura anterior a la primera coincidencia
 	for i := 1; i < len(celdas); i++ {
 		celda := celdas[i]
 
-		// Si la celda no tiene la clase del nombre, no es una celda de rutina válida (o el HTML se ha modificado)
+		// Filtramos celdas que no sean de rutinas (publicidad, layout, etc)
 		if !strings.Contains(celda, `class="category-name"`) {
-			continue 
+			continue
 		}
 
+		// Delegamos la extracción fina al helper que ya tenemos
 		nombre, url, err := extraerDatosRutina(celda)
+		
 		if err == nil && nombre != "" && url != "" {
-			// Convertimos string -> models.GrupoMuscular
 			grupo := models.GrupoMuscular(nombre)
 			rutinasMap[grupo] = url
 			encontrado = true
 		}
 	}
 
-	// Si había estructura pero no sacamos nada, es que cambiaron los nombres de clases internas
+	// Si iteramos todo y no sacamos nada limpio, algo falla en los selectores internos (por ejemplo: cambió la clase category-name)
 	if !encontrado {
 		return nil, errors.ErrNoClaseNombreCategoria
 	}
