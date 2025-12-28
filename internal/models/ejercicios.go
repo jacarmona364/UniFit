@@ -8,11 +8,12 @@ const (
 	Advanced     Dificultad = "ADVANCED"
 )
 
-// Ejericicios que pertenecen a un grupo muscular de la web
+// Ejercicios que pertenecen a un grupo muscular de la web
 type Ejercicio struct {
 	Nombre      string  // nombre del ejercicio obtenido de la web
 	Dificultad  Dificultad // un nivel de dificultad
 }
+
 
 
 
