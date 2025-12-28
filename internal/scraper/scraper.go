@@ -86,59 +86,60 @@ func procesarListaRutinas(bloque string) (map[models.GrupoMuscular]string, error
 // 2. EXTRAER EJERCICIOS (Detalle)
 
 func ExtraerEjercicios(r io.Reader) ([]models.Ejercicio, error) {
+	// 1. Carga en memoria
 	htmlContent, err := leerHTML(r)
 	if err != nil {
 		return nil, err
 	}
 
-	// 1. Validación Estructural Global
-	idxInicio := strings.Index(htmlContent, "view-exercise-term-list")
-	if idxInicio == -1 {
-		return nil, errors.ErrNoContenedorEjercicios
+	// 2. Validación y recorte del bloque principal
+	bloqueLista, err := obtenerBloqueEjercicios(htmlContent)
+	if err != nil {
+		return nil, err
 	}
 
-	// Acotamos el bloque
-	bloqueLista := htmlContent[idxInicio:]
+	// 3. Iteración y conversión de datos
+	return procesarListaEjercicios(bloqueLista)
+}
 
+func obtenerBloqueEjercicios(html string) (string, error) {
+	const marcador = "view-exercise-term-list"
+	idx := strings.Index(html, marcador)
+	if idx == -1 {
+		return "", errors.ErrNoContenedorEjercicios
+	}
+	return html[idx:], nil
+}
+
+func procesarListaEjercicios(bloque string) ([]models.Ejercicio, error) {
+	celdas := strings.Split(bloque, `class="cell`)
 	var ejercicios []models.Ejercicio
-	celdas := strings.Split(bloqueLista, `class="cell`)
 
-	// Variables para detección de errores estructurales finos
+	// Flags para diagnóstico de errores (Sad Path)
 	foundTitle := false
 	foundLevel := false
 
+	// Empezamos en 1 para saltar la cabecera antes de la primera celda
 	for i := 1; i < len(celdas); i++ {
 		celda := celdas[i]
 
-		// Validamos si esta celda tiene las partes necesarias
+		// Comprobamos integridad estructural básica de la celda
 		tieneTitulo := strings.Contains(celda, "node-title")
 		tieneNivel := strings.Contains(celda, "Exp. Level")
 
 		if tieneTitulo { foundTitle = true }
 		if tieneNivel { foundLevel = true }
 
-		// Si le falta algo crítico a esta celda específica, intentamos la siguiente,
-		// pero registramos que la estructura global podría estar mal.
-		if !tieneTitulo || !tieneNivel {
-			continue
-		}
-
-		// Extracción de datos
-		nombre, errNom := extraerNombreEjercicio(celda)
-		nivelStr, errNiv := extraerNivelExperiencia(celda)
-
-		if errNom == nil && errNiv == nil {
-			// Conversión a Enum y validación
-			dificultad := models.ParseDificultad(nivelStr)
-			ejercicios = append(ejercicios, models.Ejercicio{
-				Nombre:     nombre,
-				Dificultad: dificultad,
-			})
+		// Delegamos la construcción del objeto a un helper puro
+		if tieneTitulo && tieneNivel {
+			ej, err := construirEjercicio(celda)
+			if err == nil {
+				ejercicios = append(ejercicios, ej)
+			}
 		}
 	}
 
-	// 3. Comprobación de errores "Sad Path"
-	// Si no sacamos ejercicios, determinamos por qué falló basándonos en flags
+	// Si no sacamos nada, usamos los flags para devolver el error exacto de lo que faltó
 	if len(ejercicios) == 0 {
 		if !foundTitle {
 			return nil, errors.ErrNoClaseTituloNodo
@@ -146,11 +147,25 @@ func ExtraerEjercicios(r io.Reader) ([]models.Ejercicio, error) {
 		if !foundLevel {
 			return nil, errors.ErrNoEtiquetaNivel
 		}
-		// Si llegamos aquí, es que la lista estaba vacía de verdad (no es error de parsing)
-		return nil, nil 
+		// La estructura estaba bien pero los datos vacíos o la lista estaba vacía
+		return nil, nil
 	}
 
 	return ejercicios, nil
+}
+
+func construirEjercicio(celda string) (models.Ejercicio, error) {
+	nombre, errNom := extraerNombreEjercicio(celda)
+	nivelStr, errNiv := extraerNivelExperiencia(celda)
+
+	if errNom != nil || errNiv != nil {
+		return models.Ejercicio{}, errors.ErrLecturaHTML // O un error genérico de parseo parcial
+	}
+
+	return models.Ejercicio{
+		Nombre:     nombre,
+		Dificultad: models.ParseDificultad(nivelStr),
+	}, nil
 }
 
 
