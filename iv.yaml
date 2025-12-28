@@ -1,5 +1,6 @@
 lenguaje: go
 entidad: internal/models/rutina.go
 automatizar:
-  fichero: Taskfile.yml
+  fichero: taskfile.yml
   orden: task
+test: internal/models/rutina_test.go
