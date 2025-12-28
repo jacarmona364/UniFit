@@ -115,51 +115,37 @@ func procesarListaEjercicios(bloque string) ([]models.Ejercicio, error) {
 	celdas := strings.Split(bloque, `class="cell`)
 	var ejercicios []models.Ejercicio
 
-	// Flags para diagnóstico de errores (Sad Path)
-	foundTitle := false
-	foundLevel := false
-
-	// Empezamos en 1 para saltar la cabecera antes de la primera celda
+	// Empezamos en 1 porque el split 0 es basura anterior a la primera celda
 	for i := 1; i < len(celdas); i++ {
-		celda := celdas[i]
-
-		// Comprobamos integridad estructural básica de la celda
-		tieneTitulo := strings.Contains(celda, "node-title")
-		tieneNivel := strings.Contains(celda, "Exp. Level")
-
-		if tieneTitulo { foundTitle = true }
-		if tieneNivel { foundLevel = true }
-
-		// Delegamos la construcción del objeto a un helper puro
-		if tieneTitulo && tieneNivel {
-			ej, err := construirEjercicio(celda)
-			if err == nil {
-				ejercicios = append(ejercicios, ej)
-			}
+		// Delegamos la validación y construcción a una función pura.
+		// Si falla, simplemente ignoramos este item y seguimos.
+		if ej, err := construirEjercicio(celdas[i]); err == nil {
+			ejercicios = append(ejercicios, ej)
 		}
 	}
 
-	// Si no sacamos nada, usamos los flags para devolver el error exacto de lo que faltó
-	if len(ejercicios) == 0 {
-		if !foundTitle {
-			return nil, errors.ErrNoClaseTituloNodo
-		}
-		if !foundLevel {
-			return nil, errors.ErrNoEtiquetaNivel
-		}
-		// La estructura estaba bien pero los datos vacíos o la lista estaba vacía
-		return nil, nil
+	// Si no hemos sacado ningún ejercicio, entonces diagnosticamos POR QUÉ.
+	// Esto se hace UNA sola vez, fuera del bucle.
+	if len(ejercicios) == 0 && len(celdas) > 1 {
+		// Usamos la primera celda real como muestra para ver qué estructura falla
+		return nil, diagnosticarErrorEstructura(celdas[1])
 	}
 
 	return ejercicios, nil
 }
 
 func construirEjercicio(celda string) (models.Ejercicio, error) {
-	nombre, errNom := extraerNombreEjercicio(celda)
-	nivelStr, errNiv := extraerNivelExperiencia(celda)
+	// 1. Validaciones mínimas requeridas para que sea un ejercicio válido
+	if !strings.Contains(celda, "node-title") || !strings.Contains(celda, "Exp. Level") {
+		return models.Ejercicio{}, errors.ErrLecturaHTML // Error genérico para indicar fallo
+	}
 
-	if errNom != nil || errNiv != nil {
-		return models.Ejercicio{}, errors.ErrLecturaHTML // O un error genérico de parseo parcial
+	// 2. Extracción de datos
+	nombre, _ := extraerNombreEjercicio(celda)
+	nivelStr, _ := extraerNivelExperiencia(celda)
+
+	if nombre == "" || nivelStr == "" {
+		return models.Ejercicio{}, errors.ErrLecturaHTML
 	}
 
 	return models.Ejercicio{
@@ -168,6 +154,15 @@ func construirEjercicio(celda string) (models.Ejercicio, error) {
 	}, nil
 }
 
+func diagnosticarErrorEstructura(celdaMuestra string) error {
+	if !strings.Contains(celdaMuestra, "node-title") {
+		return errors.ErrNoClaseTituloNodo
+	}
+	if !strings.Contains(celdaMuestra, "Exp. Level") {
+		return errors.ErrNoEtiquetaNivel
+	}
+	return nil
+}
 
 // FUNCIONES AUXILIARES (HELPERS)
 
