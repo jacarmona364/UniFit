@@ -18,10 +18,9 @@ var reLink = regexp.MustCompile(`<a[^>]*>(.*?)</a>`)
 var reTags = regexp.MustCompile(`<[^>]*>`)
 
 
-
-
 // 1. EXTRAER RUTINAS (Index)
-func ExtraerRutinas(r io.Reader) (map[models.GrupoMuscular]string, error) {
+
+func ExtraerRutinas(r io.Reader) (map[models.GrupoMuscular]string, error){
 	// 1. Cargamos el HTML en memoria
 	htmlContent, err := leerHTML(r)
 	if err != nil {
