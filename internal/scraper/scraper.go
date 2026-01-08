@@ -85,6 +85,22 @@ func procesarListaRutinas(bloque string) (map[models.GrupoMuscular]string, error
 
 // 2. EXTRAER EJERCICIOS (Detalle)
 
+func parsearDificultad(nivelHTML string) models.Dificultad {
+
+	limpio := strings.ToUpper(strings.TrimSpace(nivelHTML))
+
+	switch limpio {
+	case "BEGINNER":
+		return models.Beginner
+	case "INTERMEDIATE":
+		return models.Intermediate
+	case "ADVANCED":
+		return models.Advanced
+	default:
+		return models.Beginner 
+	}
+}
+
 func ExtraerEjercicios(r io.Reader) ([]models.Ejercicio, error) {
 	// 1. Carga en memoria
 	htmlContent, err := leerHTML(r)
