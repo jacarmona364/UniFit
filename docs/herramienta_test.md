@@ -39,7 +39,7 @@ Biblioteca de aserciones enfocada en proporcionar comparaciones rápidas y mensa
 
 [Documentación oficial](https://github.com/frankban/quicktest)
 
----
+
 
 ### Goconvey (Biblioteca de aserciones)
 
