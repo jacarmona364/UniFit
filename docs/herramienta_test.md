@@ -2,15 +2,16 @@
 
 ## Biblioteca de Aserciones
 
-#### Criterio: Elimina la necesidad de herramientas externas
+#### Criterios: 
+- Expresividad: capacidad del código para comunicar la intención del test ("quiero comprobar que esto es igual a aquello") en lugar de la implementación ("si A es distinto de B, entonces imprime error"). También incluye la calidad del mensaje cuando falla el test.
+- Concisión: cantidad de código repetitivo necesario para realizar una comprobación unitaria. Poder escribir test rápido, baja fricción, para incentivar el desarrollo guiado por pruebas (TDD).
+- Autovalidable: La biblioteca debe permitir que el test revele la causa del fallo sin ambigüedad y sin necesidad de depuración manual.
 
 ### El Estándar: Paquete testing
 
-Go incluye una potente librería estándar llamada testing, que aunque no es una biblioteca de aserciones como tal, permite el uso de test y errores integrados mediante el propio lenguaje Go, con elementos
-de su propia sintaxis como *if* o *switch*.
-
-Es la herramienta oficial, no requiere instalación y garantiza compatibilidad futura. No añade dependencias 
-externas, mantiene el proyecto ligero.
+- Expresividad: Baja, la lógica no muestra la finalidad del test.
+- Concesión: Baja, ya que requiere bloques if de 3-4 líneas.
+- Autovalidación: Deficiente porque depende de que el desarrollador redacte manualmente un mensaje de error útil y consistente en cada fallo.
 
 [Documentación oficial](https://pkg.go.dev/testing)
 
@@ -18,8 +19,9 @@ externas, mantiene el proyecto ligero.
 
 ### Testify
 
-Testify es el conjunto de utilidades de testing más adoptado por la comunidad en Go fuera del estándar, complementa el runner de Go añadiendo
-una capa de aserciones (assert.Equal, assert.NotNil). Requiere de una instalación extra, pues no viene integrada con Go.
+- Expresividad: Nativa, funciones con nombres semánticos como ErrorIs 
+- Concesión: Alta, aserciones de una línea.
+- Autovalidación: Alta, genera automáticamente diffs entre el valor esperado y el obtenido, eliminando la ambigüedad.
 
 [Documentación oficial](https://github.com/stretchr/testify)
 
@@ -27,7 +29,9 @@ una capa de aserciones (assert.Equal, assert.NotNil). Requiere de una instalaci�
 
 ### Gomega
 
-Gomega es una biblioteca de aserciones que funciona mediante matchers con una sintaxis tal que (Expect(x).To(Equal(y))). Requiere la instalación de dependencias externas, no viene integrada en Go.
+- Expresividad: Muy alta, se lee casi como lenguaje natural.
+- Concesión: Alta, aserciones de una línea.
+- Autovalidación: Alta, utiliza matchers específicos.
 
 [Documentación oficial](https://github.com/onsi/gomega)
 
@@ -35,15 +39,19 @@ Gomega es una biblioteca de aserciones que funciona mediante matchers con una si
 
 ### QuickTest
 
-Biblioteca de aserciones enfocada en proporcionar comparaciones rápidas y mensajes de error muy detallados (qt.Assert). Requiere la instalación de una dependencia externa.
+- Expresividad: Alta, pero requiere pasar el comparador como argumento.
+- Concesión: Alta, aserciones de una línea.
+- Autovalidación: Alta, utiliza go-cmp internamente para diffs muy precisos.
 
 [Documentación oficial](https://github.com/frankban/quicktest)
 
-
+---
 
 ### Goconvey (Biblioteca de aserciones)
 
-Goconvey dispone de una biblioteca de aserciones y una herramienta CLI, en este caso solo necesitaríamos la primera parte. Requiere la instalación de una dependencia externa.
+- Expresividad: Alta, pero requiere de un DSL anidado.
+- Concesión: Baja, pues se requiere anidar bloques convey.
+- Autovalidación: Alta, visualmente buena (UI web), pero introduce "funciones mágicas" como So que ocultan la lógica real de Go.
 
 [Documentación oficial](https://github.com/smartystreets/goconvey)
 
