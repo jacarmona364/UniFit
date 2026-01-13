@@ -20,53 +20,37 @@ var reTags = regexp.MustCompile(`<[^>]*>`)
 
 // 1. EXTRAER RUTINAS (Index)
 
-func ExtraerRutinas(r io.Reader) (map[models.GrupoMuscular]string, error){
-	// 1. Cargamos el HTML en memoria
-	htmlContent, err := leerHTML(r)
-	if err != nil {
-		return nil, err
-	}
-
-	// 2. Acotamos la zona de trabajo (fail fast si no está el contenedor)
+func ExtraerRutinas(htmlContent string) (map[models.GrupoMuscular]string, error) {
+	
 	bloqueTrabajo, err := obtenerBloquePrincipal(htmlContent)
 	if err != nil {
 		return nil, err
 	}
 
-	// 3. Procesamos las celdas encontradas dentro del bloque
 	return procesarListaRutinas(bloqueTrabajo)
 }
 
 func obtenerBloquePrincipal(html string) (string, error) {
-	// Buscamos el div principal. Si no está, la estructura web ha cambiado.
 	const marcador = `class="mainpage-category-list"`
 	idx := strings.Index(html, marcador)
 	if idx == -1 {
 		return "", errors.ErrNoListaCategorias
 	}
-
 	return html[idx:], nil
 }
 
 func procesarListaRutinas(bloque string) (map[models.GrupoMuscular]string, error) {
 	rutinasMap := make(map[models.GrupoMuscular]string)
-	
-	// Separamos por celda individual
 	celdas := strings.Split(bloque, `class="cell"`)
 	encontrado := false
 
-	// Empezamos en 1 porque el split 0 es basura anterior a la primera coincidencia
 	for i := 1; i < len(celdas); i++ {
 		celda := celdas[i]
-
-		// Filtramos celdas que no sean de rutinas (publicidad, layout, etc)
 		if !strings.Contains(celda, `class="category-name"`) {
 			continue
 		}
 
-		// Delegamos la extracción fina al helper que ya tenemos
 		nombre, url, err := extraerDatosRutina(celda)
-		
 		if err == nil && nombre != "" && url != "" {
 			grupo := models.GrupoMuscular(nombre)
 			rutinasMap[grupo] = url
@@ -74,14 +58,11 @@ func procesarListaRutinas(bloque string) (map[models.GrupoMuscular]string, error
 		}
 	}
 
-	// Si iteramos todo y no sacamos nada limpio, algo falla en los selectores internos (por ejemplo: cambió la clase category-name)
 	if !encontrado {
 		return nil, errors.ErrNoClaseNombreCategoria
 	}
-
 	return rutinasMap, nil
 }
-
 
 // 2. EXTRAER EJERCICIOS (Detalle)
 
@@ -101,20 +82,13 @@ func parsearDificultad(nivelHTML string) models.Dificultad {
 	}
 }
 
-func ExtraerEjercicios(r io.Reader) ([]models.Ejercicio, error) {
-	// 1. Carga en memoria
-	htmlContent, err := leerHTML(r)
-	if err != nil {
-		return nil, err
-	}
-
-	// 2. Validación y recorte del bloque principal
+func ExtraerEjercicios(htmlContent string) ([]models.Ejercicio, error) {
+	
 	bloqueLista, err := obtenerBloqueEjercicios(htmlContent)
 	if err != nil {
 		return nil, err
 	}
 
-	// 3. Iteración y conversión de datos
 	return procesarListaEjercicios(bloqueLista)
 }
 
@@ -131,20 +105,20 @@ func procesarListaEjercicios(bloque string) ([]models.Ejercicio, error) {
 	celdas := strings.Split(bloque, `class="cell`)
 	var ejercicios []models.Ejercicio
 
-	// Empezamos en 1 porque el split 0 es basura anterior a la primera celda
+	// Empezamos en 1 para saltar la cabecera
 	for i := 1; i < len(celdas); i++ {
-		// Delegamos la validación y construcción a una función pura.
-		// Si falla, simplemente ignoramos este item y seguimos.
 		if ej, err := construirEjercicio(celdas[i]); err == nil {
 			ejercicios = append(ejercicios, ej)
 		}
 	}
 
-	// Si no hemos sacado ningún ejercicio, entonces diagnosticamos POR QUÉ.
-	// Esto se hace UNA sola vez, fuera del bucle.
+	// Diagnóstico de error (fuera del bucle para baja complejidad)
 	if len(ejercicios) == 0 && len(celdas) > 1 {
-		// Usamos la primera celda real como muestra para ver qué estructura falla
 		return nil, diagnosticarErrorEstructura(celdas[1])
+	}
+	// Caso borde: HTML vacío o sin celdas válidas
+	if len(ejercicios) == 0 {
+		return nil, nil
 	}
 
 	return ejercicios, nil
