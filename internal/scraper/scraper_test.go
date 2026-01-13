@@ -42,15 +42,25 @@ func cargarHTML(t *testing.T, filename string) io.Reader {
 	return file
 }
 
+func cargarHTMLString(t *testing.T, filename string) string {
+	t.Helper()
+	path := filepath.Join(testDataDir, filename)
+	bytes, err := os.ReadFile(path) // Usamos ReadFile que devuelve []byte
+	if err != nil {
+		t.Fatalf("SETUP ERROR: %v", err)
+	}
+	return string(bytes)
+}
+
 // -------------------------------------------------------------------------
 // TESTS HAPPY PATH (Usando Testify)
 // -------------------------------------------------------------------------
 
 func TestExtraerRutinas(t *testing.T) {
-	reader := cargarHTML(t, fileIndexRutina)
+	content := cargarHTMLString(t, fileIndexRutina)
 	rutinasMap, err := ExtraerRutinas(reader)
 
-	require.NoError(t, err, "La extracción de rutinas no debería fallar")
+	require.NoError(t, err)
 	require.NotEmpty(t, rutinasMap, "El mapa de rutinas no debería estar vacío")
 
 	assert.Contains(t, rutinasMap, models.Chest, "Debería contener Chest")
