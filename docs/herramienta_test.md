@@ -140,19 +140,9 @@ Mantenibilidad (Zero Boilerplate): Es la única herramienta que permite una arqu
 
 Tras el análisis, se ha decidido desacoplar el concepto de Test Runner del de Biblioteca de Aserciones para obtener lo mejor de ambos.
 
-1. Test Runner: go test (Librería estándar)
+1. Test Runner: Gotestsum
 
-2. Biblioteca de Aserciones: testing
+2. Biblioteca de Aserciones: Testify
 
 3. Herramienta CLI: Go
 
-
-## Aplicación de Principios F.I.R.S.T.
-
-Para asegurar la calidad del código en los modelos (`Rutina`, `Ejercicio`) y en el `scraper`, hemos aplicado los principios F.I.R.S.T. de la siguiente forma:
-
-* **Fast (Rápidos):** Las pruebas son unitarias y se ejecutan en memoria. No realizamos peticiones HTTP reales a la web ni conexiones a bases de datos, lo que permite correr toda la suite en milisegundos.
-* **Independent (Independientes):** Cada test prepara sus propios datos (leyendo un HTML de prueba) y no comparte estado con los demás. Si falla la validación de un ejercicio, no afecta a las pruebas de las rutinas.
-* **Repeatable (Repetibles):** Eliminamos el factor aleatorio. Al usar archivos locales (`testdata`) y estructuras de datos fijas, los tests dan siempre el mismo resultado, sin depender de si la web externa está caída o ha cambiado.
-* **Self-Validating (Autovalidables):** No es necesario revisar logs manualmente. El propio test compara el resultado obtenido con el esperado (por ejemplo, que un ejercicio sea "Beginner") y reporta automáticamente si hay un fallo o un error de estructura.
-* **Timely (Oportunos):** Los tests se han desarrollado a la par que el código. Esto nos ha permitido definir primero los posibles errores (como estructuras HTML rotas o datos inválidos) y programar la solución para manejarlos correctamente desde el principio.
