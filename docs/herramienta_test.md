@@ -71,32 +71,58 @@ Esta decisión se justifica por las siguientes razones:
 
 ## Test runner
 
-#### Criterios: Elimina la necesidad de herramientas externas y No requiere código de inicialización (Zero Boilerplate)
+Tras seleccionar Testify para las aserciones, necesitamos elegir la herramienta encargada de orquestar la ejecución, el descubrimiento de tests y el reporte de resultados.
 
-### El Estándar: go test
-Viene instalado por defecto de manera nativa con Go. No requiere código de setup.
+#### Criterios: 
 
-[Documentación oficial](https://pkg.go.dev/testing)
+- Modelo de Ejecución (DSL vs. Nativo): Si el runner nos obliga a reescribir los tests usando un DSL o ejecuta funciones Go estándar
+- Integración con Aserciones: Cómo se comporta con la biblioteca elegida (Testify)
+- Calidad del Reporte: Capacidad para mostrar logs, panics y tiempos de ejecución.
+
+### Gotestsum
+
+- Modelo de Ejecución (Nativo): Ejecuta los tests estándar de Go (func TestX) sin requerir DSLs ni cambios en el código.
+- Integración con Aserciones (Testify): Total. Interpreta la salida JSON de los tests y formatea los errores de Testify de manera legible.
+- Calidad del Reporte: Alta. Muestra resúmenes compactos, gestiona reintentos de tests inestables y genera XML (JUnit) automáticamente.
+
+[Documentación oficial](https://github.com/gotestyourself/gotestsum)
 
 ### Ginkgo
 
-Ginkgo es un framework BDD completo. Requiere instalar y un binario CLI externo además de escribir explícitamente un Hook de conexión y una función TestMain en cada paquete, añadiendo código de
-inicialización que no aporta valor de negocio.
+El ejecutor del framework Ginkgo. Aunque está pensado para BDD, puede ejecutar tests, pero con mucha sobrecarga.
+
+- Modelo de Ejecución (DSL): Diseñado para ejecutar especificaciones BDD (Describe/It).
+- Integración con Aserciones (Testify): Baja. Optimizado para Gomega. Usarlo solo para correr tests estándar es matar moscas a cañonazos.
+- Calidad del Reporte: Verbosa y estructurada en árbol.
 
 [Documentación oficial](https://github.com/onsi/ginkgo)
 
 ---
 
-### Goconvey (Solo CLI/UI)
+### Goconvey Runner
 
-Goconvey destaca por ofrecer una interfaz web en tiempo real para visualizar los tests. Requiere la instalación de binarios adicionales para levantar el servidor web de reportes. Introduce un DSL (Convey(...)) que actúa como una capa de abstracción sobre el test. Aunque también posee una biblioteca de aserciones, para el test runner solo utilizaríamos el CLI de manera independiente.
+Runner enfocado en el desarrollo local con feedback visual.
+
+- Modelo de Ejecución (Híbrido): Centrado en el modo "Watch" (ejecución automática al guardar).
+- Integración con Aserciones (Testify): Media. Funciona, pero su valor principal está en su propia interfaz web.
+- Calidad del Reporte: Visual (Semáforos en navegador). Pobre en consola.
 
 [Documentación oficial](https://github.com/smartystreets/goconvey)
 
 ---
 
 ## Test runner seleccionado:
-Nos quedamos con el estándar *go test*. Es la única opción que garantiza "Zero Config": el desarrollador solo escribe el test y funciona. Evitamos la deuda técnica de mantener archivos de configuración (boilerplate) y la gestión de binarios externos en el entorno de desarrollo. Desechamos también la necesidad de llevar a cabo instalaciones de herramientas externas
+Hemos descartado go test por su salida primitiva y elegimos Gotestsum como herramienta de ejecución
+
+### Justificación:
+
+#### Herramienta Seleccionada: Gotestsum
+
+Elegimos Gotestsum porque cumple estrictamente la función de runner sin añadir complejidad innecesaria:
+
+- Modelo de Ejecución (Nativo): Mantiene la simplicidad al ejecutar funciones Go estándar, evitando la deuda técnica de adoptar un DSL (como Ginkgo).
+- Integración con Aserciones: Complementa perfectamente a Testify, formateando sus mensajes de error de forma legible sin interferir en la lógica.
+- Calidad del Reporte: Mejora sustancialmente la salida de consola (colores, agrupación de fallos) y añade capacidades profesionales (XML) que el CLI básico no tiene.
 
 ---
 
