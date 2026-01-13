@@ -35,7 +35,7 @@
 
 [Documentación oficial](https://github.com/onsi/gomega)
 
----
+## Otras alternativas
 
 ### QuickTest
 
@@ -58,7 +58,14 @@
 ----
 
 ## Biblioteca de aserciones seleccionada:
-Nos quedamos con el estándar de Go, *testing*, ya que simplifica muy considerablemente su uso e integración con el lenguaje al venir por defecto con Go.
+
+Tras el análisis comparativo, hemos seleccionado Testify como biblioteca de aserciones.
+
+Esta decisión se justifica por las siguientes razones:
+
+- Maximiza la Concisión: Reduce el código repetitivo de los tests considerablemente frente a la biblioteca estándar, eliminando bloques if repetitivos y facilitando la escritura rápida de pruebas ("Timely").
+- Garantiza la Autovalidación: Al estandarizar los mensajes de error y generar "Diffs" automáticos, elimina la dependencia de que el desarrollador redacte manualmente mensajes de log descriptivos, asegurando que cada fallo sea autoexplicativo.
+- Expresividad: A diferencia de Gomega o GoConvey, Testify utiliza funciones estándar de Go (assert.Equal) en lugar de introducir un DSL complejo, manteniendo el código legible.
 
 ---
 
