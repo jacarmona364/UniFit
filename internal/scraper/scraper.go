@@ -9,13 +9,7 @@ import (
 	"UniFit/internal/models"
 )
 
-// Limpieza
-
-// reTags elimina cualquier etiqueta HTML <...>
 var reTags = regexp.MustCompile(`<[^>]*>`)
-
-
-// 1. EXTRAER RUTINAS (Index)
 
 func ExtraerRutinas(htmlContent string) (map[models.GrupoMuscular]string, error) {
 	
@@ -61,8 +55,6 @@ func procesarListaRutinas(bloque string) (map[models.GrupoMuscular]string, error
 	return rutinasMap, nil
 }
 
-// 2. EXTRAER EJERCICIOS (Detalle)
-
 func parsearDificultad(nivelHTML string) models.Dificultad {
 
 	limpio := strings.ToUpper(strings.TrimSpace(nivelHTML))
@@ -102,18 +94,15 @@ func procesarListaEjercicios(bloque string) ([]models.Ejercicio, error) {
 	celdas := strings.Split(bloque, `class="cell`)
 	var ejercicios []models.Ejercicio
 
-	// Empezamos en 1 para saltar la cabecera
 	for i := 1; i < len(celdas); i++ {
 		if ej, err := construirEjercicio(celdas[i]); err == nil {
 			ejercicios = append(ejercicios, ej)
 		}
 	}
 
-	// Diagnóstico de error (fuera del bucle para baja complejidad)
 	if len(ejercicios) == 0 && len(celdas) > 1 {
 		return nil, diagnosticarErrorEstructura(celdas[1])
 	}
-	// Caso borde: HTML vacío o sin celdas válidas
 	if len(ejercicios) == 0 {
 		return nil, nil
 	}
@@ -122,12 +111,10 @@ func procesarListaEjercicios(bloque string) ([]models.Ejercicio, error) {
 }
 
 func construirEjercicio(celda string) (models.Ejercicio, error) {
-	// 1. Validaciones mínimas requeridas para que sea un ejercicio válido
 	if !strings.Contains(celda, "node-title") || !strings.Contains(celda, "Exp. Level") {
-		return models.Ejercicio{}, errors.ErrLecturaHTML // Error genérico para indicar fallo
+		return models.Ejercicio{}, errors.ErrLecturaHTML
 	}
 
-	// 2. Extracción de datos
 	nombre, _ := extraerNombreEjercicio(celda)
 	nivelStr, _ := extraerNivelExperiencia(celda)
 
@@ -151,7 +138,6 @@ func diagnosticarErrorEstructura(celdaMuestra string) error {
 	return nil
 }
 
-// FUNCIONES AUXILIARES (HELPERS)
 
 func leerHTML(r io.Reader) (string, error) {
 	bodyBytes, err := io.ReadAll(r)
@@ -161,10 +147,7 @@ func leerHTML(r io.Reader) (string, error) {
 	return string(bodyBytes), nil
 }
 
-// extraerDatosRutina saca nombre y URL de un bloque de celda de rutina
 func extraerDatosRutina(bloque string) (nombre, url string, err error) {
-	// Buscamos el href manualmente con strings para la URL
-	// Estructura: <a href="/exercises/..."
 	startHref := strings.Index(bloque, `href="`)
 	if startHref != -1 {
 		startHref += 6 // Longitud de href="
@@ -174,7 +157,6 @@ func extraerDatosRutina(bloque string) (nombre, url string, err error) {
 		}
 	}
 
-	// Para el nombre buscamos dentro de la clase category-name
 	idxCat := strings.Index(bloque, `class="category-name">`)
 	if idxCat != -1 {
 		idxCat += len(`class="category-name">`)
@@ -188,7 +170,6 @@ func extraerDatosRutina(bloque string) (nombre, url string, err error) {
 }
 
 func extraerNombreEjercicio(bloque string) (string, error) {
-	// Buscamos el bloque del título
 	idxTitle := strings.Index(bloque, `class="node-title"`)
 	if idxTitle == -1 {
 		return "", errors.ErrNoClaseTituloNodo
@@ -205,14 +186,12 @@ func extraerNombreEjercicio(bloque string) (string, error) {
 }
 
 func extraerNivelExperiencia(bloque string) (string, error) {
-	// Buscamos la etiqueta Exp. Level
 	marcador := "Exp. Level</label>"
 	idx := strings.Index(bloque, marcador)
 	if idx == -1 {
 		return "", errors.ErrNoEtiquetaNivel
 	}
 
-	// El texto está después del marcador y antes del cierre del div
 	resto := bloque[idx+len(marcador):]
 	idxFin := strings.Index(resto, "</div>")
 	if idxFin == -1 {
@@ -222,7 +201,6 @@ func extraerNivelExperiencia(bloque string) (string, error) {
 	return LimpiarTexto(resto[:idxFin]), nil
 }
 
-// Elimina tags, &nbsp;, saltos de línea y espacios extra.
 func LimpiarTexto(textoSucio string) string {
 	s := reTags.ReplaceAllString(textoSucio, "")
 	s = strings.ReplaceAll(s, "&nbsp;", " ")
