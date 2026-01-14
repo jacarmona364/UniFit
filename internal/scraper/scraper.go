@@ -11,9 +11,6 @@ import (
 
 // Limpieza
 
-// reLink captura el contenido dentro de un <a>: <a ...>CONTENIDO</a>
-var reLink = regexp.MustCompile(`<a[^>]*>(.*?)</a>`)
-
 // reTags elimina cualquier etiqueta HTML <...>
 var reTags = regexp.MustCompile(`<[^>]*>`)
 
@@ -198,10 +195,10 @@ func extraerNombreEjercicio(bloque string) (string, error) {
 	}
 	
 	fragmento := bloque[idxTitle:]
-	// Usamos Regex solo para sacar el texto limpio del <a> dentro del título
-	match := reLink.FindStringSubmatch(fragmento)
-	if len(match) < 2 {
-		return "", nil // No se encontró enlace, algo raro
+	idxFin := strings.Index(fragmento, "</div>")
+	
+	if idxFin != -1 {
+		fragmento = fragmento[:idxFin]
 	}
 	
 	return LimpiarTexto(match[1]), nil
