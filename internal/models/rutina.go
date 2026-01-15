@@ -1,10 +1,10 @@
 package models
-type GrupoMuscular int
+type GrupoMuscular string
 const (
-	// iota empieza en 0.
-	Abductors GrupoMuscular = iota
-	Abs
-	Biceps
+	Abductors GrupoMuscular = "Abductors"
+	Abs       GrupoMuscular = "Abs"
+	Biceps    GrupoMuscular = "Biceps"
+	Chest     GrupoMuscular = "Chest"
 	//... se deben añadir los grupos a trabajar
 )
 

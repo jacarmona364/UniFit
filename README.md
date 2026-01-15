@@ -22,6 +22,7 @@ En consecuencia, el proceso de organización es manual, improvisado y propenso a
 - `task install-deps`: Instala las dependencias del proyecto utilizando Go Modules.
 - `task clean`: Elimina el binario y otros archivos generados durante la compilación.
 - `task check`: Verifica que el código fuente esté correctamente formateado y que cumpla con las reglas de sintaxis definidas.
+- `task test`: Ejecuta los tests del proyecto.
 
 ## [Gestor de dependencias](/docs/gestor_dependencias.md)
 
@@ -34,6 +35,7 @@ La documentación relativa al proyecto se encuentra en la carpeta de [Documentos
 ## Configuración
 
 La configuración del proyecto viene recogida en [Configuracion](/docs/config)
+
 
 
 
