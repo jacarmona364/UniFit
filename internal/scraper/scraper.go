@@ -9,7 +9,7 @@ import (
 	"UniFit/internal/models"
 )
 
-var reTags = regexp.MustCompile(`<[^>]*>`)
+var reTags = regexp.MustCompile(`<[^>]+>`)
 
 func ExtraerRutinas(htmlContent string) (map[models.GrupoMuscular]string, error) {
 	
