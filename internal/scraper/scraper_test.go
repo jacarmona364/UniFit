@@ -79,6 +79,19 @@ func TestExtraerEjercicios(t *testing.T) {
 	assert.Equal(t, models.Beginner, ejercicios[0].Dificultad)
 }
 
+
+func TestExtraerEjercicios_LimpiezaNombre(t *testing.T) {
+	htmlContent := cargarHTMLString(t, fileEjercicioComplejo)
+
+	ejercicios, err := ExtraerEjercicios(htmlContent)
+
+	require.NoError(t, err)
+	require.NotEmpty(t, ejercicios)
+
+	assert.Equal(t, "Push Up (Variante)", ejercicios[0].Nombre)
+	assert.Equal(t, models.Beginner, ejercicios[0].Dificultad)
+}
+
 // -------------------------------------------------------------------------
 // TESTS SAD PATH (Validación de Errores con Testify)
 // -------------------------------------------------------------------------
