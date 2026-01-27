@@ -2,78 +2,105 @@
 
 ## Criterios:
 
-- **Tamaño**: Dado que ahora mismo no necesitamos la mayoría de las funcionalidades que nos ofrece una imagen completa, buscaremos que la imagen base sea lo más pequeña posible, con lo mínimo necesario para nuestro propósito.
-- **Velocidad**: En lugar de atender a la complejidad de la configuración que solo se va a tener que realizar una vez, debemos fijarnos en el tiempo medio que tardan en ejecutar los test, acción que se va a llevar a cabo repetidas veces. 
-- **Seguridad**: La imagen debe ser estable y segura, para ello vamos a filtrar por herramientas oficiales y con una frecuencia de actualización inferior a los 6 meses. Este criterio es importante, pues nos estaríamos asegurando
-que no existan vulnerabilidades en la imagen.
+- **Seguridad:** Minimizar la superficie de ataque. El objetivo es **0 vulnerabilidades** críticas o altas.
+- **Operabilidad:** Capacidad de diagnóstico. Lo ideal es disponer de una shell (`/bin/sh`) para inspeccionar el sistema de archivos, verificar permisos y depurar errores.
+- **Observabilidad y Mantenibilidad:** Capacidad de extender el contenedor en caliente (ej. instalar `curl` o `top` para diagnósticos de red/rendimiento) y facilidad para gestionar usuarios no-root sin configuraciones complejas.
+- **Eficiencia:** Reducir el tamaño final para agilizar los tiempos de descarga y despliegue, siempre que no comprometa los criterios anteriores.
 
 ---
 
 ## Alternativas:
 
-- **scratch**: Es una imagen vacía. Es la opción mínima en cuanto a tamaño, ya que solo se instala expresamente lo que se necesite. También es segura, pero al no traer Go instalado, requiere de configuraciones complejas que pueden generar vulnerabilidades.
+- **`scratch`**:
+  - **Descripción:** Es una imagen vacía (sin sistema operativo).
+  - **Tamaño y Seguridad:** La opción óptima teórica (mínimo tamaño absoluto, 0 vulnerabilidades).
+  - **Operabilidad (Consola):** **NULA**. No dispone de shell (`/bin/sh`), lo que hace imposible acceder al contenedor para revisar logs, ficheros o permisos.
+  - **Monitorización:** **NULA**. Al no tener sistema de archivos ni gestor de paquetes, es imposible instalar herramientas de diagnóstico en caliente si surge un problema.
 
-- **golang:alpine**: Es una imagen de Go en Alpine Linux, una distribución de Linux extremadamente ligera. Es mantenida por los desarrolladores de Go con una actividad muy considerable, actualizada hace menos de una semana.
+- **`golang:alpine`**:
+  - **Descripción:** Distribución de Linux orientada a la seguridad y extremada ligereza.
+  - **Tamaño y Seguridad:** Muy ligera (~18MB en su versión runtime) y segura (0 vulnerabilidades). Mantenida activamente.
+  - **Operabilidad (Consola):** **ALTA**. Incluye shell nativa (`/bin/sh`), permitiendo la navegación y revisión del sistema de archivos.
+  - **Monitorización:** **ALTA**. Dispone del gestor de paquetes `apk`, lo que permite instalar herramientas de red o monitoreo (como `curl`, `htop`) en tiempo de ejecución sin necesidad de reconstruir la imagen.
   - Última actualización: Hace 4 días.
 
-- **golang:bookworm**: Es una imagen de Go en Debian Bookworm, una distribución de Linux más completa, además de ser extremadamente estable y con soporte. Es más pesada que otras alternativas, pero trae instalado Go y otras dependencias.
-
-- **debian:stable-slim**: Es una imagen de Debian en su versión estable, pero con prácticamente ningún paquete instalado. De hecho, es una imagen ultraligera que solo contiene lo esencial para ejecutar aplicaciones. Pasa lo mismo que con scratch, requiere de más configuración al no tener Go instalado, pero esta no es especialmente compleja como en otros casos.
+- **`golang:bookworm`**:
+  - **Descripción:** Imagen completa basada en Debian Bookworm.
+  - **Tamaño:** Excesivo para una imagen final (>800MB), ya que incluye compiladores y librerías innecesarias para la ejecución.
+  - **Operabilidad:** **MUY ALTA**. Tiene todas las herramientas imaginables preinstaladas.
+    
+- **`debian:stable-slim`**:
+  - **Descripción:** Versión recortada de Debian estable.
+  - **Tamaño y Seguridad:** Significativamente más pesada que otras opciones como Alpine y suele presentar vulnerabilidades de prioridad baja/media inherentes a sus librerías base.
+  - **Operabilidad (Consola):** **ALTA**. Incluye `bash`, un estándar muy familiar para desarrolladores.
+  - **Monitorización:** **ALTA**. Utiliza `apt`, permitiendo una fácil instalación de herramientas.
   - Última actualización: Hace 2 días.
 
-- **bitnami/golang**: Es una imagen de Go mantenida por Bitnami, trae los últimos fixes de seguridad y características lo más pronto posible. Las imágenes siguen siendo bastante pesadas si las comparamos con golang:alpine u otras alternativas.
+- **`bitnami/golang`**:
+  - **Descripción:** Imagen mantenida por Bitnami, enfocada en actualizaciones rápidas de seguridad.
+  - **Tamaño:** Pesada en comparación con las opciones nativas de Alpine.
+  - **Operabilidad:** **ALTA**.
   - Última actualización: Hace 1 día.
 
 ---
 
 ## Métricas:
 
-### Tamaño de imagen final
+### 1. Eficiencia: Tamaño de imagen final
 
-Comparativa del tamaño de la imagen construida (Sistema operativo + Binario compilado):
+Medición del tamaño total de la imagen construida (Sistema operativo + Binario compilado).
+*Objetivo: < 50 MB.*
 
 | Imagen | Tamaño |
 |--------|--------|
 | `scratch` | **12.4 MB** |
-| `alpine:3.21` | **18.1 MB** |
+| `golang:alpine` (Runtime) | **18.1 MB** |
 | `debian:stable-slim` | 42.5 MB |
-| `bitnami/golang` | 920 MB |
+| `golang:bookworm` | > 800 MB |
+| `bitnami/golang` | > 900 MB |
 
-### Velocidad de ejecución de tests
+### 2. Rendimiento: Velocidad de ejecución de tests
 
-Tiempo de ejecución de la suite de tests unitarios (promedio de 50 iteraciones):
+Tiempo de ejecución de la suite de tests unitarios (promedio de 50 iteraciones).
+*Objetivo: Minimizar latencia en CI/CD.*
 
-| Imagen | Media | Desv.Est | Min | Max |
-|--------|-------|----------|-----|-----|
-| `scratch` | **45.10ms** | ±0.80ms | 43ms | 48ms |
-| `alpine:3.21` | **46.50ms** | ±1.20ms | 44ms | 52ms |
-| `debian:stable-slim` | 48.20ms | ±1.15ms | 46ms | 55ms |
-| `golang:1.25` | 55.40ms | ±3.50ms | 50ms | 68ms |
+| Imagen | Media | Desv.Est | Comparativa |
+|--------|-------|----------|-------------|
+| `scratch` | **45.10ms** | ±0.80ms | Referencia |
+| `golang:alpine` | **46.50ms** | ±1.20ms | +1.4ms |
+| `debian:stable-slim` | 48.20ms | ±1.15ms | +3.1ms |
+| `golang:bookworm` | 55.40ms | ±3.50ms | +10.3ms |
 
-### Análisis de seguridad 
+### 3. Seguridad: Análisis de Vulnerabilidades (CVEs)
 
-Escaneo realizado con Trivy el 2026-01-06:
+Escaneo realizado con **Trivy** (Fecha: 2026-01-27). Se prioriza la ausencia de vulnerabilidades Críticas o Altas.
 
-Para el análisis de seguridad se ha realizado el escaneo de las imágenes base con Trivy. Se elige esta herramienta por ser una herramienta de código abierto y disponer de una amplia base de datos de vulnerabilidades conocidas.
+| Imagen base | CRITICAL | HIGH | MEDIUM | LOW | Estado |
+|-------------|----------|------|--------|-----|--------|
+| `scratch` | **0** | **0** | 0 | 0 | Seguro |
+| `golang:alpine` | **0** | **0** | 0 | 0 | Seguro |
+| `bitnami/golang` | 0 | 0 | 4 | 8 | Requiere parches |
+| `debian:stable-slim` | 0 | 0 | 2 | 16 | Requiere parches |
+| `golang:bookworm` | 2 | 14 | 45 | 120 | Inseguro |
 
-| Imagen base | Total | CRITICAL | HIGH | MEDIUM | LOW |
-|-------------|-------|----------|------|--------|-----|
-| `scratch` | **0** | 0 | 0 | 0 | 0 | N/A |
-| `alpine:3.21` | **0** | 0 | 0 | 0 | 0 |
-| `bitnami/golang` | **12** | 0 | 0 | 4 | 8 |
-| `debian:stable-slim` | **18** | 0 | 0 | 2 | 16 |
+### 4. Operabilidad y Monitorización (Cualitativo)
 
+Evaluación de la capacidad para gestionar, depurar y extender el contenedor en un entorno productivo o de desarrollo.
+
+| Criterio | `scratch` | `golang:alpine` | `debian:stable-slim` | `golang:bookworm` |
+| :--- | :---: | :---: | :---: | :---: |
+| **Acceso a Consola** | **No**<br>(Caja negra) | **Sí**<br>(Nativa) | **Sí**<br>(Bash/Sh) | **Sí**<br>(Completa) |
+| **Monitorización** | **No**<br>(Sin gestor paquetes) | **Sí**<br>(`apk add`) | **Sí**<br>(`apt install`) | **Sí**<br>(`apt install`) |
+| **Gestión Usuarios** | **Difícil**<br>(Manual /etc/passwd) | **Nativa**<br>(`adduser`) | **Nativa**<br>(`useradd`) | **Nativa**<br>(`useradd`) |
+| **Depuración** | **Imposible** | **Fácil** | **Fácil** | **Fácil** |
 
 ---
 
 
 ## Elección de la imagen
 
-Para tomar esta decisión debemos atender firmemente a los criterios establecidos, pues, de momento, solo necesitamos un entorno que nos permita ejecutar una aplicación con apenas dependencias. Todas las alternativas nos ofrecen estabilidad y seguridad en mayor o menor medida, 
-pero hay algunas más pesadas que otras. Las dos más afines a lo que buscamos serían **golang:alpine** y **debian:stable-slim**, decantándome finalmente por **debian:stable-slim** debido a lo extremadamente ligera que es para instalar lo mínimo para poder llevar a cabo nuestro objetivo. 
-Además, esta permite utilizar la última versión estable de Go, la 1.25.5.
+Para tomar esta decisión debemos atender a los criterios establecidos, pues, de momento, solo necesitamos un entorno que nos permita ejecutar una aplicación segura y mantenible con apenas dependencias. Todas las alternativas nos ofrecen estabilidad en mayor o menor medida, pero hay diferencias críticas en cuanto a operabilidad y tamaño. Las dos más afines a lo que buscamos serían scratch y alpine:3.21, decantándome finalmente por alpine:3.21 debido a que ofrece el equilibrio necesario entre ligereza extrema y capacidad de gestión.
 
-A pesar de que `scratch` y `alpine` lideran en métricas puras, elijo **debian:stable-slim** como la opción final.
+A pesar de que scratch lidera marginalmente en métricas puras de tamaño, elijo alpine:3.21 (implementada vía Multi-Stage Build) como la opción final.
 
-**Justificación:**
-Aunque es ligeramente más pesada (42.5 MB), sigue siendo muy ligera para los estándares actuales y ofrece bastante estabilidad, evitando los problemas de configuración de `scratch` y las incompatibilidades de librerías de `alpine`. Las vulnerabilidades detectadas son de prioridad baja y no afectan al binario de Go.
+Justificación: Aunque es ligeramente más pesada que scratch (una diferencia de apenas 6 MB), sigue siendo extremadamente ligera para los estándares actuales (18.1 MB vs los 42.5 MB de Debian) y ofrece una ventaja crucial: Operabilidad. A diferencia de scratch, Alpine incluye una consola (/bin/sh) y un gestor de paquetes, permitiendo diagnosticar errores y monitorizar el contenedor en caso de fallo, algo imposible en una imagen vacía. Además, mantiene el estándar de seguridad con 0 vulnerabilidades detectadas, igualando a scratch en este aspecto crítico.
