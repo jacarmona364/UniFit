@@ -1,29 +1,29 @@
-FROM debian:stable-slim
+FROM golang:1.25 AS builder
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends wget ca-certificates git && \
-    rm -rf /var/lib/apt/lists/* && \
-    useradd -m -s /bin/bash test
+RUN go install github.com/go-task/task/v3/cmd/task@latest && \
+    go install gotest.tools/gotestsum@latest
 
-RUN wget -q https://go.dev/dl/go1.25.5.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go1.25.5.linux-amd64.tar.gz && \
-    rm go1.25.5.linux-amd64.tar.gz
+WORKDIR /app
 
-RUN sh -c "$(wget -O - https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
-
-USER test
-ENV PATH=$PATH:/usr/local/go/bin
-ENV GOPATH=/home/test/go
-ENV PATH=$PATH:$GOPATH/bin
-
-RUN go install gotest.tools/gotestsum@latest
-
-WORKDIR /app/test
-
-COPY --chown=test:test go.mod go.sum* ./
-
+COPY go.mod go.sum ./
 RUN go mod download
 
-COPY --chown=test:test Taskfile.yml ./
+COPY . .
+
+FROM gcr.io/distroless/static-debian12:debug
+
+ENV PATH=$PATH:/usr/local/go/bin:/usr/local/bin
+
+COPY --from=builder /usr/local/go /usr/local/go
+
+COPY --from=builder /go/bin/task /usr/local/bin/task
+COPY --from=builder /go/bin/gotestsum /usr/local/bin/gotestsum
+
+WORKDIR /app/test
+COPY --from=builder --chown=nonroot:nonroot /app /app/test
+
+USER nonroot:nonroot
+
+ENV CGO_ENABLED=0
 
 ENTRYPOINT ["task", "test"]
