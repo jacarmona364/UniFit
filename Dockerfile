@@ -1,5 +1,7 @@
 FROM golang:1.25 AS builder
 
+ENV CGO_ENABLED=0
+
 RUN go install github.com/go-task/task/v3/cmd/task@latest && \
     go install gotest.tools/gotestsum@latest
 
@@ -13,6 +15,12 @@ COPY . .
 FROM gcr.io/distroless/static-debian12:debug
 
 ENV PATH=$PATH:/usr/local/go/bin:/usr/local/bin
+
+ENV GOCACHE=/go-cache
+ENV GOMODCACHE=/go-cache/mod
+
+SHELL ["/busybox/sh", "-c"]
+RUN mkdir -p /go-cache/mod && chmod -R 777 /go-cache
 
 COPY --from=builder /usr/local/go /usr/local/go
 
