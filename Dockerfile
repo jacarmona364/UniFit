@@ -10,7 +10,8 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
-COPY . .
+COPY Taskfile.yml ./
+COPY internal/ internal/
 
 FROM gcr.io/distroless/static-debian12:debug
 
