@@ -14,15 +14,12 @@ RUN task setup
 
 COPY internal/ internal/
 
-FROM gcr.io/distroless/static-debian12:debug
+FROM gcr.io/distroless/static-debian12
 
 ENV PATH=$PATH:/usr/local/go/bin:/usr/local/bin
 
 ENV GOCACHE=/go-cache
 ENV GOMODCACHE=/go-cache/mod
-
-SHELL ["/busybox/sh", "-c"]
-RUN mkdir -p /go-cache/mod && chmod -R 777 /go-cache
 
 COPY --from=builder /usr/local/go /usr/local/go
 
