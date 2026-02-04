@@ -29,7 +29,7 @@ COPY --from=builder /go/bin/gotestsum /usr/local/bin/gotestsum
 WORKDIR /app/test
 COPY --from=builder --chown=nonroot:nonroot /app /app/test
 
-USER nonroot:nonroot
+USER nonroot
 
 ENV CGO_ENABLED=0
 
