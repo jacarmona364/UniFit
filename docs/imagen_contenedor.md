@@ -4,7 +4,6 @@
 
 - **Seguridad:** Minimizar la superficie de ataque. El objetivo es **0 vulnerabilidades** críticas o altas.
 - **Eficiencia:** Reducir el tamaño final para agilizar los tiempos de descarga y despliegue, siempre que no comprometa los criterios anteriores.
-- **Inmutabilidad** El entorno de pruebas debe ser estéril e inmutable. No debe permitir la modificación del sistema en tiempo de ejecución, ya sea para instalación de paquetes manuales o cambios de configuración en caliente.
 
 ---
 
@@ -13,37 +12,31 @@
 - **`scratch`**:
   - **Descripción:** Es una imagen vacía (sin sistema operativo).
   - **Seguridad:** **Máxima**. Superficie de ataque inexistente.
-  - **Inmutabilidad:** **Absoluta**. Al no tener shell ni librerías, es imposible modificar el entorno manualmente; si funciona, es únicamente por el binario.
   - **Eficiencia:** **Óptima**. Tamaño mínimo absoluto.
 
 - **`golang:alpine`**:
   - **Descripción:** Distribución Linux mínima basada en Alpine.
   - **Seguridad:** Alta, aunque introduce riesgos de compatibilidad al usar musl libc en lugar de glibc que es el estándar.
-  - **Inmutabilidad:** **Baja (Mutable)**. Incluye gestor de paquetes apk y shell /bin/sh. Esto permite la instalación de dependencias no declaradas y la modificación del entorno en tiempo de ejecución, lo cual es un riesgo para la fiabilidad de los tests.
   - **Eficiencia:** Muy buena (~18MB).
 
 - **`golang:bookworm`**:
   - **Descripción:** Imagen completa basada en Debian Bookworm.
   - **Seguridad:** **Baja**. Superficie de ataque masiva debido a cientos de librerías y binarios preinstalados que no necesitamos.
-  - **Inmutabilidad:** **Nula**. Entorno totalmente mutable con herramientas de compilación y gestión de paquetes completas como apt, permitiendo cualquier modificación del sistema.
   - **Eficiencia:** **Pésima**. Tamaño excesivo (>800MB) que ralentiza drásticamente los tiempos de descarga en CI/CD.
     
 - **`debian:stable-slim`**:
   - **Descripción:** Versión recortada de Debian estable.
   - **Seguridad:** **Media**. Aunque reduce la superficie de ataque respecto a la versión completa, sigue incluyendo un sistema operativo base con utilidades estándar que suelen presentar vulnerabilidades de prioridad baja/media periódicamente.
-  - **Inmutabilidad:** **Baja (Mutable)**. Mantiene el gestor de paquetes apt y una shell completa (bash), lo que permite instalar dependencias no declaradas y alterar el contenedor, violando el criterio de inmutabilidad.
   - **Eficiencia:** **Media**. Es más ligera que la versión completa (~75MB), pero sigue siendo mucho más pesada que las opciones estáticas (~2MB).
 
 - **`bitnami/golang`**:
   - **Descripción:** Imagen mantenida por Bitnami, enfocada en actualizaciones rápidas de seguridad.
   - **Seguridad:** Bitnami Mantiene un perfil de vulnerabilidades bajo, pero superior al de una imagen mínima (se detectaron 12 en el análisis).
-  - **Inmutabilidad:** **Nula**. Entorno totalmente mutable con herramientas de compilación y gestión de paquetes completas como apt, permitiendo cualquier modificación del sistema.
   - **Eficiencia** La imagen es **muy pesada** (>900MB) en comparación con las demás opciones.
  
 - **`gcr.io/distroless/static-debian12`**:
   - **Descripción:** Imagen mínima de Google. Contiene solo lo imprescindible para la ejecución (certificados CA y usuario nonroot) sobre una base Debian.
   - **Seguridad:** **Excelente**. Mantiene una política estricta de vulnerabilidades y se ejecuta sin privilegios.
-  - **Inmutabilidad:** **Muy Alta**. Carece de shell y gestor de paquetes (apt eliminado), impidiendo modificaciones manuales o instalaciones en caliente dentro del entorno de pruebas.
   - **Eficiencia:** Excelente (~2MB + binario).
 
 ---
