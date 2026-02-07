@@ -2,7 +2,7 @@ FROM golang:bookworm
 
 RUN go install github.com/go-task/task/v3/cmd/task@latest
 
-RUN useradd -u 1001 -m -s /bin/bash usuario_tests
+RUN useradd -m usuario_tests
 
 RUN mkdir -p /tmp/gocache /tmp/gomodcache && \
     chown -R 1001:1001 /tmp/gocache /tmp/gomodcache && \
