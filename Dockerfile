@@ -16,7 +16,7 @@ RUN mkdir -p /tmp/gocache /tmp/gomodcache && \
 ENV GOCACHE=/tmp/gocache
 ENV GOMODCACHE=/tmp/gomodcache
 
-WORKDIR /app
+WORKDIR /app/test
 
 USER usuario_tests
 
