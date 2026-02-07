@@ -5,7 +5,6 @@ RUN go install github.com/go-task/task/v3/cmd/task@latest
 RUN useradd -m usuario_tests
 
 RUN mkdir -p /tmp/gocache /tmp/gomodcache && \
-    chown -R 1001:1001 /tmp/gocache /tmp/gomodcache && \
     chmod -R 777 /tmp/gocache /tmp/gomodcache
 
 ENV GOCACHE=/tmp/gocache
