@@ -1,2 +1,2 @@
-
+FROM golang:bookworm
 
