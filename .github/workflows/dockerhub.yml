@@ -3,7 +3,7 @@ name: dockerhub
 on:
   push:
     paths:
-      - 'Dockerfile'
+      - 'test.Dockerfile'
       - 'Taskfile.yml'
 jobs:
   docker:
