@@ -12,3 +12,5 @@ RUN mkdir -p /tmp/gocache /tmp/gomodcache && \
     chmod -R 777 /tmp/gocache /tmp/gomodcache
 
 WORKDIR /app/test
+
+ENTRYPOINT ["task", "test"]
