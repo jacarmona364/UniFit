@@ -13,4 +13,4 @@ RUN mkdir -p /tmp/gocache /tmp/gomodcache && \
 
 WORKDIR /app/test
 
-ENTRYPOINT ["task", "test"]
+ENTRYPOINT ["task", "test"] 
