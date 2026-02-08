@@ -25,5 +25,8 @@ tasks:
       
   test:
     desc: Ejecuta los tests unitarios de todo el proyecto
+    env:
+      GOCACHE: /tmp/gocache
+      GOMODCACHE: /tmp/gomodcache
     cmds:
       - go run gotest.tools/gotestsum@latest --format short-verbose ./...
