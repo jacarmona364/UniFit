@@ -4,3 +4,11 @@ RUN go install github.com/go-task/task/v3/cmd/task@latest
 
 RUN useradd -u 1001 -m tester
 USER tester
+
+ENV GOCACHE=/tmp/gocache
+ENV GOMODCACHE=/tmp/gomodcache
+
+RUN mkdir -p /tmp/gocache /tmp/gomodcache && \
+    chmod -R 777 /tmp/gocache /tmp/gomodcache
+
+WORKDIR /app/test
