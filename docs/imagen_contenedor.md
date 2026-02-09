@@ -10,6 +10,7 @@
 Además, para este análisis descartaremos directamente imágenes que no cumplan con estos requisitos:
 - **Oficial:** La imagen debe ser oficial, es decir, o bien propia del lenguaje o bien mantenidad por sus desarrolladores y no únicamente por la comunidad.
 - **Estable:** Descartaremos versiones experimentales o que no hayan sido probadas y verificadas, que puedan comprometer el entorno a futuro generando deuda técnica.
+- **Evitar Copy-Go-From-Builder:** Algunas de las imágenes no traen go instalado, lo cual imposibilita instalar las dependencias necesarias.
 
 ---
 
@@ -26,14 +27,6 @@ Además, para este análisis descartaremos directamente imágenes que no cumplan
   - **Descripción:** Imagen completa basada en Debian Bookworm.
   - **Seguridad:** **Baja**. Aunque no es la imagen más segura, cumple con los mínimos requeridos para nuestro objetivo.
   - **Tamaño:** **Baja**. Tamaño considerable (>800MB), integra muchos elementos que no son necesarios para la ejecución de test, por lo que crece considerablemente.
-  - **Directorios:** Sí
-  - **Usuarios:** Sí
-
-    
-- **`debian:stable-slim`**:
-  - **Descripción:** Versión recortada de Debian estable.
-  - **Seguridad:** **Media**. Aunque reduce la superficie de ataque respecto a la versión completa, sigue incluyendo un sistema operativo base con utilidades estándar que suelen presentar vulnerabilidades de prioridad baja/media periódicamente.
-  - **Tamaño:** **Media**. Es más ligera que la versión completa (~75MB), pero sigue siendo mucho más pesada que las opciones estáticas (~2MB).
   - **Directorios:** Sí
   - **Usuarios:** Sí
 
@@ -57,8 +50,7 @@ Además, para este análisis descartaremos directamente imágenes que no cumplan
 
 ## Elección de la imagen
 
-Seleccionamos **`debian:stable-slim`**, ya que es la imagen que tiene todo lo que necesitamos sin pesar como una completa como bitnami o bookworm. 
+Seleccionamos **`golang:bookworm`**, ya que es la imagen que tiene todo lo que necesitamos a pesar de ser menos ligera que otras. 
 
 **Justificación:**
-Nos decantamos finalmente por la versión slim de debian, ya que es una imagen recortada, idónea para solo ejecutar test. Además nos permite usar otra imagen de builder más pesada para instalar lo necesario y posteriormente montarlo en la imagen final. Otras alternativas como scratch o distroless son menos pesadas pero no permiten la gestión de usuarios, herramienta fundamental para crear el usuario sin permisos que necesitaremos.
-
+Nos quedamos finalmente con bookworm, ya que es, junto con bitnami (salvo por musl), la que trae todo lo que necesitamos para poder ejecutar los test con los requerimientos para ello. Permite gestionar usuarios, directorios, trae go instalado y es más ligera que bitnami.
