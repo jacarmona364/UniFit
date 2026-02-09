@@ -3,8 +3,13 @@
 ## Criterios:
 
 - **Seguridad:** Minimizar la superficie de ataque. El objetivo es **0 vulnerabilidades** críticas o altas.
-- **Eficiencia:** Reducir el tamaño final para agilizar los tiempos de descarga y despliegue, siempre que no comprometa los criterios anteriores.
-- **Permite montar el contenedor en una etapa**
+- **Tamaño:** Reducir el tamaño final para agilizar los tiempos de descarga y despliegue, siempre que no comprometa los criterios anteriores y disponga de elementos mínimos para poder trabajar con ella, como certificados CA, estructura de ficheros o alguna de las dependencias necesarias como glibc para soportar binarios dinámicos.
+- **Gestión de directorios:** Daremos preferencia a las imágenes que permitan la gestión de directorios, pues evitamos tener que montarlos en el builder y hacer una copia en la imagen final.
+- **Gestión de usuarios:** Como necesitamos crear un usuario que ejecute los test y no tenga permisos, necesitamos una imagen que nos permita crearlo o traerlo creado.
+   
+Además, para este análisis descartaremos directamente imágenes que no cumplan con estos requisitos:
+- **Oficial:** La imagen debe ser oficial, es decir, o bien propia del lenguaje o bien mantenidad por sus desarrolladores y no únicamente por la comunidad.
+- **Estable:** Descartaremos versiones experimentales o que no hayan sido probadas y verificadas, que puedan comprometer el entorno a futuro generando deuda técnica.
 
 ---
 
@@ -13,54 +18,47 @@
 - **`scratch`**:
   - **Descripción:** Es una imagen vacía (sin sistema operativo).
   - **Seguridad:** **Máxima**. Superficie de ataque inexistente.
-  - **Eficiencia:** **Óptima**. Tamaño mínimo absoluto.
-  - **Permite montar el contenedor en una etapa:** No.
-
-
-- **`golang:alpine`**:
-  - **Descripción:** Distribución Linux mínima basada en Alpine.
-  - **Seguridad:** Alta, aunque introduce riesgos de compatibilidad al usar musl libc en lugar de glibc que es el estándar.
-  - **Eficiencia:** Muy buena (~18MB).
-  - **Permite montar el contenedor en una etapa:** Si.
-
+  - **Tamaño:** **Óptima**. Tamaño mínimo absoluto.
+  - **Directorios:** Con builder
+  - **Usuarios:** No
 
 - **`golang:bookworm`**:
   - **Descripción:** Imagen completa basada en Debian Bookworm.
   - **Seguridad:** **Baja**. Aunque no es la imagen más segura, cumple con los mínimos requeridos para nuestro objetivo.
-  - **Eficiencia:** **Baja**. Tamaño considerable (>800MB).
-  - **Permite montar el contenedor en una etapa:** Si.
+  - **Tamaño:** **Baja**. Tamaño considerable (>800MB), integra muchos elementos que no son necesarios para la ejecución de test, por lo que crece considerablemente.
+  - **Directorios:** Sí
+  - **Usuarios:** Sí
 
     
 - **`debian:stable-slim`**:
   - **Descripción:** Versión recortada de Debian estable.
   - **Seguridad:** **Media**. Aunque reduce la superficie de ataque respecto a la versión completa, sigue incluyendo un sistema operativo base con utilidades estándar que suelen presentar vulnerabilidades de prioridad baja/media periódicamente.
-  - **Eficiencia:** **Media**. Es más ligera que la versión completa (~75MB), pero sigue siendo mucho más pesada que las opciones estáticas (~2MB).
-  - **Permite montar el contenedor en una etapa:** Si.
+  - **Tamaño:** **Media**. Es más ligera que la versión completa (~75MB), pero sigue siendo mucho más pesada que las opciones estáticas (~2MB).
+  - **Directorios:** Sí
+  - **Usuarios:** Sí
 
 
 - **`bitnami/golang`**:
-  - **Descripción:** Imagen mantenida por Bitnami, enfocada en actualizaciones rápidas de seguridad.
+  - **Descripción:** Imagen mantenida por Bitnami, enfocada en actualizaciones rápidas de seguridad, es similar a bookworm.
   - **Seguridad:** Bitnami Mantiene un perfil de vulnerabilidades bajo, pero superior al de una imagen mínima (se detectaron 12 en el análisis).
-  - **Eficiencia** La imagen es **muy pesada** (>900MB) en comparación con las demás opciones.
-  - **Permite montar el contenedor en una etapa:** Si. 
-
+  - **Tamaño** La imagen es **muy pesada** (>900MB) en comparación con las demás opciones. De nuevo es una imagen completa con utilidades innecesarias para ejecutar test.
+  - **Directorios:** Sí
+  - **Usuarios:** Sí
  
 - **`gcr.io/distroless/static-debian12`**:
-  - **Descripción:** Imagen mínima de Google. Contiene solo lo imprescindible para la ejecución (certificados CA y usuario nonroot) sobre una base Debian.
+  - **Descripción:** Imagen mínima de Google. Contiene solo lo imprescindible para la ejecución sobre una base Debian.
   - **Seguridad:** **Excelente**. Mantiene una política estricta de vulnerabilidades y se ejecuta sin privilegios.
-  - **Eficiencia:** Excelente (~2MB + binario).
-  - **Permite montar el contenedor en una etapa:** No.
-
+  - **Tamaño:** Excelente (~2MB + binario).
+  - **Directorios:** Con builder
+  - **Usuarios:** Nonroot existente en la imagen 
 
 ---
 
 
 ## Elección de la imagen
 
-Seleccionamos **`golang:bookworm`**.
+Seleccionamos (por definir)
 
-Tras redefinir los criterios en base a la necesidad de un entorno de pruebas robusto y estándar, nos decantamos por la imagen oficial basada en Debian 12 (Bookworm). Durante el análisis evaluamos alternativas como bitnami/golang (imágenes de terceros) o alpine (imágenes mínimas), pero decidimos descartarlas. Alpine introduce complejidades de compatibilidad con librerías C (musl vs glibc) y las imágenes de terceros añaden una capa de dependencia externa innecesaria. Lo principal es buscar una imagen que ofrezca un equilibrio entre reproducibilidad y seguridad, permitiendo la gestión explícita de usuarios y permisos (useradd).
 
 **Justificación:**
 
-Al ser la imagen oficial basada en Debian (glibc), asegura la máxima compatibilidad con el toolchain de Go y las herramientas de sistema estándar. Esto nos permite implementar una gestión de seguridad explícita (creación de usuarios no privilegiados y gestión de cachés) utilizando comandos nativos de Linux.
