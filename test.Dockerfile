@@ -1,6 +1,9 @@
 # Fase de build: Instalamos Task y dependencias
 FROM golang:bookworm AS builder
 
+# Fuerzo la instalación de binarios en go/bin
+ENV GOBIN=/go/bin
+
 # Instalo el gestor de tareas
 RUN go install github.com/go-task/task/v3/cmd/task@latest
 
@@ -14,8 +17,8 @@ RUN task install
 FROM golang:bookworm
 
 # Copiamos task, gotestsum y las librerías descargadas de go mod
-COPY --from=builder /go/bin/task /bin/task
-COPY --from=builder /go/bin/gotestsum usr/local/bin/gotestsum
+COPY --from=builder /go/bin/task /usr/local/bin/task
+COPY --from=builder /go/bin/gotestsum /usr/local/bin/gotestsum
 COPY --from=builder /go/pkg/mod /go/pkg/mod
 
 # Creo el ususario sin permisos
@@ -28,7 +31,9 @@ ENV GOMODCACHE=/go/pkg/mod
 # Doy permisos a los directorios temporales.
 RUN mkdir -p /tmp/gocache && \
     chmod -R 777 /tmp/gocache && \
-    chmod -R 777 /go/pkg/mod
+    chmod -R 777 /go/pkg/mod && \
+    chmod +x /usr/local/bin/task && \
+    chmod +x /usr/local/bin/gotestsum
 
 # Apunto al directorio de trabajo
 WORKDIR /app/test
