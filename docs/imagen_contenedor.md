@@ -57,8 +57,8 @@ Además, para este análisis descartaremos directamente imágenes que no cumplan
 
 ## Elección de la imagen
 
-Seleccionamos (por definir)
-
+Seleccionamos **`debian:stable-slim`**, ya que es la imagen que tiene todo lo que necesitamos sin pesar como una completa como bitnami o bookworm. 
 
 **Justificación:**
+Nos decantamos finalmente por la versión slim de debian, ya que es una imagen recortada, idónea para solo ejecutar test. Además nos permite usar otra imagen de builder más pesada para instalar lo necesario y posteriormente montarlo en la imagen final. Otras alternativas como scratch o distroless son menos pesadas pero no permiten la gestión de usuarios, herramienta fundamental para crear el usuario sin permisos que necesitaremos.
 
