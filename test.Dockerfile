@@ -15,7 +15,7 @@ FROM golang:bookworm
 
 # Copiamos task, gotestsum y las librerías descargadas de go mod
 COPY --from=builder /go/bin/task /bin/task
-COPY --from=builder /go/bin/gotestsum /bin/gotestsum
+COPY --from=builder /go/bin/gotestsum usr/local/bin/gotestsum
 COPY --from=builder /go/pkg/mod /go/pkg/mod
 
 # Creo el ususario sin permisos
