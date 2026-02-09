@@ -2,9 +2,13 @@ name: dockerhub
 
 on:
   push:
-    paths:
-      - 'test.Dockerfile'
-      - 'Taskfile.yml'
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  IMAGE_NAME: jacarmona364/unifit
+  
 jobs:
   docker:
     runs-on: ubuntu-latest
