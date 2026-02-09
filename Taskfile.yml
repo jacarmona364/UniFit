@@ -29,6 +29,5 @@ tasks:
     env:
       GOCACHE: /tmp/gocache
       GOMODCACHE: /tmp/gomodcache
-    deps: [install]
     cmds:
       - gotestsum --format short-verbose ./...
