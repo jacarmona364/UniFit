@@ -19,7 +19,7 @@ Además, para este análisis descartaremos directamente imágenes que no cumplan
 - **`scratch`**:
   - **Descripción:** Es una imagen vacía (sin sistema operativo).
   - **Seguridad:** **Máxima**. Superficie de ataque inexistente. 
-  - **Tamaño:** **Óptima**. Tamaño mínimo absoluto.
+  - **Tamaño:** **Óptima**. Tamaño mínimo absoluto, 0MB, es la imagen vacía.
   - **Directorios:** Con builder
   - **Usuarios:** No
 
