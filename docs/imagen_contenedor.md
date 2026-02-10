@@ -3,7 +3,7 @@
 ## Criterios:
 
 - **Seguridad:** Minimizar la superficie de ataque. El objetivo es **0 vulnerabilidades** críticas o altas.
-- **Tamaño:** Reducir el tamaño final para agilizar los tiempos de descarga y despliegue, siempre que no comprometa los criterios anteriores y disponga de elementos mínimos para poder trabajar con ella, como certificados CA, estructura de ficheros o alguna de las dependencias necesarias como glibc para soportar binarios dinámicos.
+- **Tamaño:** Reducir el tamaño final para agilizar los tiempos de descarga y despliegue, siempre que no comprometa los criterios anteriores y disponga de elementos mínimos para poder trabajar con ella, como certificados CA, estructura de ficheros o alguna de las dependencias necesarias como glibc para soportar binarios dinámicos. 
 - **Gestión de directorios:** Daremos preferencia a las imágenes que permitan la gestión de directorios, pues evitamos tener que montarlos en el builder y hacer una copia en la imagen final.
 - **Gestión de usuarios:** Como necesitamos crear un usuario que ejecute los test y no tenga permisos, necesitamos una imagen que nos permita crearlo o traerlo creado.
    
@@ -46,6 +46,14 @@ Además, para este análisis descartaremos directamente imágenes que no cumplan
   - **Usuarios:** Nonroot existente en la imagen 
 
 ---
+
+| Imagen | Tamaño |
+|--------|--------|
+| `scratch` | **12.4 MB** |
+| `gcr.io/distroless/static-debian12` | **15.1 MB** |
+| `debian:stable-slim` | 42.5 MB |
+| `golang:bookworm` | > 800 MB |
+| `bitnami/golang` | > 900 MB |
 
 
 ## Elección de la imagen
