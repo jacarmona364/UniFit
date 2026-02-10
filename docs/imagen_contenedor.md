@@ -18,7 +18,7 @@ Además, para este análisis descartaremos directamente imágenes que no cumplan
 
 - **`scratch`**:
   - **Descripción:** Es una imagen vacía (sin sistema operativo).
-  - **Seguridad:** **Máxima**. Superficie de ataque inexistente.
+  - **Seguridad:** **Máxima**. Superficie de ataque inexistente. 
   - **Tamaño:** **Óptima**. Tamaño mínimo absoluto.
   - **Directorios:** Con builder
   - **Usuarios:** No
@@ -55,6 +55,14 @@ Además, para este análisis descartaremos directamente imágenes que no cumplan
 | `golang:bookworm` | > 800 MB |
 | `bitnami/golang` | > 900 MB |
 
+| Imagen | Vulnerabilidades (Críticas/Altas) |
+| :--- | :---: |
+| `scratch` | 0 |
+| `gcr.io/distroless/static-debian12` | 0 |
+| `golang:alpine` | 2 |
+| `debian:stable-slim` | 14 |
+| `golang:bookworm` | 76 |
+| `bitnami/golang` | 78 |
 
 ## Elección de la imagen
 
