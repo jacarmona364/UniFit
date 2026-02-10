@@ -34,7 +34,7 @@ Además, para este análisis descartaremos directamente imágenes que no cumplan
 - **`bitnami/golang`**:
   - **Descripción:** Imagen mantenida por Bitnami, enfocada en actualizaciones rápidas de seguridad, es similar a bookworm.
   - **Seguridad:** Bitnami Mantiene un perfil de vulnerabilidades bajo, pero superior al de una imagen mínima (se detectaron 12 en el análisis).
-  - **Tamaño** La imagen es **muy pesada** (>900MB) en comparación con las demás opciones. De nuevo es una imagen completa con utilidades innecesarias para ejecutar test.
+  - **Tamaño** La imagen es **muy pesada** (>900MB) en comparación con las demás opciones. De nuevo es una imagen completa con utilidades innecesarias para ejecutar test. 
   - **Directorios:** Sí
   - **Usuarios:** Sí
  
