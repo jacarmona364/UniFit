@@ -22,7 +22,7 @@ COPY --from=builder /go/bin/gotestsum /usr/local/bin/gotestsum
 COPY --from=builder /go/pkg/mod /go/pkg/mod
 
 # Creo el ususario sin permisos
-RUN useradd -m tester
+RUN useradd -r -m tester
 
 # Redirijo la caché a /tmp y apunto los módulos a donde los copié
 ENV GOCACHE=/tmp/gocache
