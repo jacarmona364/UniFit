@@ -18,15 +18,15 @@ Además, para este análisis descartaremos directamente imágenes que no cumplan
 
 - **`scratch`**:
   - **Descripción:** Es una imagen vacía (sin sistema operativo).
-  - **Seguridad:** **Máxima**. Superficie de ataque inexistente. 
-  - **Tamaño:** **Óptima**. Tamaño mínimo absoluto, 0MB, es la imagen vacía.
+  - **Seguridad:** Superficie de ataque inexistente. 
+  - **Tamaño:** Tamaño mínimo absoluto, 0MB, es la imagen vacía.
   - **Directorios:** Con builder
   - **Usuarios:** No
 
 - **`golang:bookworm`**:
   - **Descripción:** Imagen completa basada en Debian Bookworm.
-  - **Seguridad:** **Baja**. Aunque no es la imagen más segura, cumple con los mínimos requeridos para nuestro objetivo.
-  - **Tamaño:** **Baja**. Tamaño considerable (>800MB), integra muchos elementos que no son necesarios para la ejecución de test, por lo que crece considerablemente.
+  - **Seguridad:** Aunque no es la imagen más segura, cumple con los mínimos requeridos para nuestro objetivo.
+  - **Tamaño:** Tamaño considerable (>800MB), integra muchos elementos que no son necesarios para la ejecución de test, por lo que crece considerablemente.
   - **Directorios:** Sí
   - **Usuarios:** Sí
 
@@ -40,7 +40,7 @@ Además, para este análisis descartaremos directamente imágenes que no cumplan
  
 - **`gcr.io/distroless/static-debian12`**:
   - **Descripción:** Imagen mínima de Google. Contiene solo lo imprescindible para la ejecución sobre una base Debian.
-  - **Seguridad:** **Excelente**. Mantiene una política estricta de vulnerabilidades y se ejecuta sin privilegios.
+  - **Seguridad:** Mantiene una política estricta de vulnerabilidades y se ejecuta sin privilegios.
   - **Tamaño:** Excelente (~2MB + binario).
   - **Directorios:** Con builder
   - **Usuarios:** Nonroot existente en la imagen 
